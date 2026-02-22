@@ -1,6 +1,6 @@
 # Creative Commons Attribution 4.0 International License
 
-Copyright (c) 2026 SzaBee13
+Copyright (c) SzaBee13 2024-2026
 
 This work is licensed under the Creative Commons Attribution 4.0 International License.
 To view a copy of this license, visit [it here](http://creativecommons.org/licenses/by/4.0)
