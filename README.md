@@ -1,73 +1,115 @@
-# React + TypeScript + Vite
+# SzaBee.me - Personal Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive portfolio website built with React, TypeScript, and Vite. Features a clean design with light/dark theme support and real-time music integration via Last.fm.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Responsive Design** - Fully optimized for mobile, tablet, and desktop
+- **Theme Toggle** - Light/dark mode with localStorage persistence
+- **Now Playing** - Real-time Last.fm integration showing currently playing music
+- **Project Showcase** - Displays personal and class projects with links
+- **Skills Section** - Visual representation of technical skills with SVG icons
+- **Social Links** - Easy access to GitHub, YouTube, Twitch, Discord, Docker Hub, and email
+- **Fast Performance** - Built with Vite for lightning-fast development and optimized builds
 
-## React Compiler
+## 🛠️ Technologies
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 18** - UI library
+- **TypeScript** - Type-safe JavaScript
+- **Vite** - Build tool and dev server
+- **Tailwind CSS** - Utility-first CSS framework
+- **Last.fm API** - Music integration
 
-## Expanding the ESLint configuration
+## 📁 Project Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+szabee.me/
+├── public/
+│   ├── icons/              # SVG icons for skills
+│   ├── .well-known/        # Discord & security verification
+│   ├── robots.txt
+│   └── security-policy.html
+├── src/
+│   ├── components/
+│   │   ├── About.tsx
+│   │   ├── ClassProjects.tsx
+│   │   ├── HeroSection.tsx
+│   │   ├── Navbar.tsx
+│   │   ├── NowPlaying.tsx
+│   │   ├── Projects.tsx
+│   │   ├── Skills.tsx
+│   │   └── Socials.tsx
+│   ├── hooks/
+│   │   └── useTheme.ts     # Theme management hook
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── index.css
+├── index.html
+├── vite.config.ts
+├── tsconfig.json
+└── package.json
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🔧 Setup & Installation
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. **Clone the repository**
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+   ```bash
+   git clone https://github.com/SzaBee13/szabee.me.git
+   cd szabee.me
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Start development server**
+
+   ```bash
+   npm run dev
+   ```
+
+4. **Open in browser**
+
+   ```plaintext
+   http://localhost:5173
+   ```
+
+## 📜 Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build locally
+- `npm run lint` - Run ESLint
+
+## 🌐 Deployment
+
+The project can be deployed to various platforms:
+
+- **Vercel** - `vercel deploy`
+- **Netlify** - Drag & drop the `dist` folder
+- **GitHub Pages** - Build and push `dist` to `gh-pages` branch
+
+Build output is generated in the `dist/` directory.
+
+## 🎨 Customization
+
+### Theme Colors
+
+Edit theme colors in component files or extend Tailwind configuration in `tailwind.config.js`.
+
+### Last.fm Integration
+
+The NowPlaying component fetches from Last.fm API. Update the username in `NowPlaying.tsx` to customize.
+
+### Projects
+
+Add or modify projects in `Projects.tsx` and `ClassProjects.tsx` by editing the project arrays.
+
+## 📝 License
+
+This project is licensed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
+
+You are free to use, share, and adapt this work as long as you provide appropriate attribution.
