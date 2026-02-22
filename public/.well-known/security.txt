@@ -1,0 +1,7 @@
+Contact: mailto:me@szabee.me
+Contact: https://discord.gg/VkuwtBXWnD
+Expires: 2027-02-01T00:00:00Z
+Acknowledgments: https://github.com/SzaBee13
+Preferred-Languages: en-US, en-GB, hu-HU
+Policy: https://szabee.me/security-policy.html
+Canonical: https://szabee.me/.well-known/security.txt
