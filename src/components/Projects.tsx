@@ -31,13 +31,13 @@ export const Projects = () => {
       ],
     },
     {
-      title: 'Valkon Client',
-      description: 'Me and my friend wanted to create a Fortnite client. So we made it. This is my first public project.',
-      tags: ['Python', 'Client', 'Fortnite'],
+      title: "Dev Tools Powershell",
+      description: "Dev is a PowerShell function designed to simplify and streamline development workflows on Windows.",
+      tags: ['Powershell', 'Tools', 'Utils'],
       links: [
-        { label: 'Visit Page', url: 'https://valkonclient.pages.dev' },
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/valkonclient' },
-      ],
+        { label: 'Visit Page', url: 'https://dev.szabee.me' },
+        { label: 'GitHub', url: 'https://github.com/SzaBee13/dev-tools-ps' },
+      ]
     },
     {
       title: 'Useful Py',
@@ -45,6 +45,15 @@ export const Projects = () => {
       tags: ['Python', 'Tools', 'Input', 'Lists'],
       links: [
         { label: 'GitHub', url: 'https://github.com/SzaBee13/useful-py' },
+      ],
+    },
+    {
+      title: 'Valkon Client',
+      description: 'Me and my friend wanted to create a Fortnite client. So we made it. This is my first public project.',
+      tags: ['Python', 'Client', 'Fortnite'],
+      links: [
+        { label: 'Visit Page', url: 'https://valkonclient.pages.dev' },
+        { label: 'GitHub', url: 'https://github.com/SzaBee13/valkonclient' },
       ],
     },
     {

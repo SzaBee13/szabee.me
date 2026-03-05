@@ -27,7 +27,7 @@ export const Navbar = () => {
 
   return (
     <nav className={`flex justify-between items-center p-4 fixed w-full top-0 z-10 ${
-      isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-800 text-white'
+      isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900 border-b border-gray-200'
     }`}>
       {/* Left: Picture */}
       <div className="flex items-center">
