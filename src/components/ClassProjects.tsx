@@ -19,34 +19,7 @@ export const ClassProjects = () => {
         { label: 'Visit Page', url: 'https://day-gueesr.vercel.app' },
         { label: 'GitHub', url: 'https://github.com/SzaBee13/Day-Guesser' },
       ],
-    },
-    {
-      title: 'Todos',
-      description: 'Create, edit, delete, TODOs.',
-      tags: ['Javascript', 'Todo', 'Backend'],
-      links: [
-        { label: 'Visit Page', url: 'https://todos-aa.vercel.app' },
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/todos_AA' },
-      ],
-    },
-    {
-      title: 'Users',
-      description: 'List of not real users.',
-      tags: ['Javascript', 'User', 'Backend'],
-      links: [
-        { label: 'Visit Page', url: 'https://users-aa.vercel.app' },
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/users_AA' },
-      ],
-    },
-    {
-      title: 'Media',
-      description: 'You can "buy" media, create buyable media.',
-      tags: ['Javascript', 'Media', 'Backend'],
-      links: [
-        { label: 'Visit Page', url: 'https://media-aa.vercel.app' },
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/media_AA' },
-      ],
-    },
+    }
   ];
 
   const getTagColor = (tag: string) => {
@@ -63,9 +36,9 @@ export const ClassProjects = () => {
       id="class"
       className={`py-12 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}
     >
-      <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center">Class Projects</h2>
-        <p className="text-sm md:text-base mb-6 text-center">NOTE: These are my projects, you find more of my project at GitHub that are programmed at classes.</p>
+      <div className="max-w-6xl px-4 mx-auto">
+        <h2 className="mb-4 text-2xl font-bold text-center md:text-3xl">Class Projects</h2>
+        <p className="mb-6 text-sm text-center md:text-base">NOTE: These are my projects, you find more of my project at GitHub that are programmed at classes.</p>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {classProjects.map((project) => (
             <div
@@ -74,8 +47,8 @@ export const ClassProjects = () => {
                 isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-gray-50 border border-gray-200'
               }`}
             >
-              <h3 className="text-lg md:text-xl font-bold mb-2">{project.title}</h3>
-              <p className="text-sm md:text-base mb-4">{project.description}</p>
+              <h3 className="mb-2 text-lg font-bold md:text-xl">{project.title}</h3>
+              <p className="mb-4 text-sm md:text-base">{project.description}</p>
               <div className="flex flex-wrap gap-2 mb-4">
                 {project.tags.map((tag) => {
                   const colors = getTagColor(tag);
@@ -104,12 +77,12 @@ export const ClassProjects = () => {
                         }`}
                       >
                         {isGitHub && (
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 .5C5.648.5.5 5.648.5 12c0 5.086 3.292 9.396 7.86 10.93.574.106.786-.25.786-.554 0-.273-.01-1.004-.015-1.97-3.2.696-3.875-1.544-3.875-1.544-.523-1.33-1.277-1.684-1.277-1.684-1.043-.714.08-.7.08-.7 1.152.08 1.756 1.184 1.756 1.184 1.025 1.754 2.69 1.247 3.344.954.104-.743.4-1.247.727-1.534-2.553-.29-5.238-1.277-5.238-5.683 0-1.255.448-2.28 1.184-3.084-.12-.29-.512-1.457.112-3.037 0 0 .96-.307 3.144 1.176a10.94 10.94 0 0 1 5.728 0c2.184-1.483 3.144-1.176 3.144-1.176.624 1.58.232 2.747.112 3.037.736.804 1.184 1.83 1.184 3.084 0 4.417-2.69 5.39-5.252 5.673.408.352.776 1.048.776 2.112 0 1.526-.015 2.756-.015 3.13 0 .308.208.666.792.554C20.708 21.396 24 17.086 24 12 24 5.648 18.352.5 12 .5z" />
                           </svg>
                         )}
                         {isVisit && (
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                           </svg>
                         )}
