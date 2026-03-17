@@ -31,18 +31,19 @@ export const Navbar = () => {
     }`}>
       {/* Left: Picture */}
       <div className="flex items-center">
-        <img src="/szabee13.jpg" alt="Logo" className="h-10 w-10 rounded-full" />
+        <img src="/szabee13.jpg" alt="Logo" className="w-10 h-10 rounded-full" />
       </div>
 
       {/* Center: Page Selector */}
       <ul className="hidden md:flex md:space-x-6">
-        <li><a href="#home" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded">Home</a></li>
-        <li><a href="#about" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded">About</a></li>
-        <li><a href="#skills" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded">Skills</a></li>
-        <li><a href="#projects" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded">Projects</a></li>
-        <li><a href="#class" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded">Class Projects</a></li>
-        <li><a href="#socials" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded">Socials</a></li>
-        <li><a href="#now-playing-widget" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded">Now Playing</a></li>
+        <li><a href="/#home" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Home</a></li>
+        <li><a href="/#about" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">About</a></li>
+        <li><a href="/#skills" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Skills</a></li>
+        <li><a href="/#projects" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Projects</a></li>
+        <li><a href="/#class" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Class Projects</a></li>
+        <li><a href="/#socials" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Socials</a></li>
+        <li><a href="/#now-playing-widget" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Now Playing</a></li>
+        <li><a href="/blogs" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Blogs</a></li>
       </ul>
 
       {/* Right: Theme Selector and Hamburger Menu */}
@@ -64,14 +65,15 @@ export const Navbar = () => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <ul className="md:hidden absolute top-16 left-0 w-full bg-gray-800 p-4 flex flex-col space-y-2">
-          <li><a href="#home" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded block">Home</a></li>
-          <li><a href="#about" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded block">About</a></li>
-          <li><a href="#skills" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded block">Skills</a></li>
-          <li><a href="#projects" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded block">Projects</a></li>
-          <li><a href="#class" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded block">Class Projects</a></li>
-          <li><a href="#socials" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded block">Socials</a></li>
-          <li><a href="#now-playing-widget" className="hover:bg-gray-700 hover:text-white px-3 py-2 rounded block">Now Playing</a></li>
+        <ul className="absolute left-0 flex flex-col w-full p-4 space-y-2 bg-gray-800 md:hidden top-16">
+          <li><a href="/#home" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Home</a></li>
+          <li><a href="/#about" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">About</a></li>
+          <li><a href="/#skills" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Skills</a></li>
+          <li><a href="/#projects" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Projects</a></li>
+          <li><a href="/#class" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Class Projects</a></li>
+          <li><a href="/#socials" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Socials</a></li>
+          <li><a href="/#now-playing-widget" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Now Playing</a></li>
+          <li><a href="/blogs" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Blogs</a></li>
         </ul>
       )}
     </nav>

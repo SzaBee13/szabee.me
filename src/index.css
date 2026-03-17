@@ -13,7 +13,113 @@ body {
   width: 100%;
 }
 
+html {
+  scroll-padding-top: 5rem;
+}
+
+section[id],
+div[id] {
+  scroll-margin-top: 5rem;
+}
+
 a {
   text-decoration: inherit;
+}
+
+.blog-markdown {
+  line-height: 1.75;
+}
+
+.blog-markdown h1,
+.blog-markdown h2,
+.blog-markdown h3,
+.blog-markdown h4 {
+  line-height: 1.25;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.blog-markdown h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.blog-markdown h2 {
+  font-size: 1.5rem;
+  font-weight: 650;
+}
+
+.blog-markdown h3 {
+  font-size: 1.25rem;
+  font-weight: 650;
+}
+
+.blog-markdown p,
+.blog-markdown ul,
+.blog-markdown ol,
+.blog-markdown pre,
+.blog-markdown blockquote {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.blog-markdown ul,
+.blog-markdown ol {
+  padding-left: 1.25rem;
+}
+
+.blog-markdown code {
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.9em;
+}
+
+.blog-markdown pre {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  padding: 0.85rem;
+}
+
+.blog-markdown blockquote {
+  border-left: 4px solid;
+  padding-left: 0.9rem;
+}
+
+.blog-markdown-light a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.blog-markdown-light code {
+  background: #f3f4f6;
+}
+
+.blog-markdown-light pre {
+  background: #111827;
+  color: #f9fafb;
+}
+
+.blog-markdown-light blockquote {
+  border-left-color: #d1d5db;
+  color: #374151;
+}
+
+.blog-markdown-dark a {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+
+.blog-markdown-dark code {
+  background: #1f2937;
+}
+
+.blog-markdown-dark pre {
+  background: #111827;
+  color: #e5e7eb;
+}
+
+.blog-markdown-dark blockquote {
+  border-left-color: #4b5563;
+  color: #d1d5db;
 }
 

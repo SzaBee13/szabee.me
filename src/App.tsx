@@ -7,6 +7,7 @@ import { Projects } from './components/Projects';
 import { ClassProjects } from './components/ClassProjects';
 import { Socials } from './components/Socials';
 import { NowPlaying } from './components/NowPlaying';
+import Footer from './components/Footer';
 
 function App() {
   const { isDarkMode } = useTheme();
@@ -14,7 +15,7 @@ function App() {
   return (
     <div className={`${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
       <Navbar />
-      <div className="pt-16">
+      <div>
         <HeroSection />
         <About />
         <Skills />
@@ -22,9 +23,7 @@ function App() {
         <ClassProjects />
         <Socials />
         <NowPlaying />
-        <footer className={`py-8 text-center border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-          <p>&copy; 2024-2026 SzaBee13. All rights reserved.</p>
-        </footer>
+        <Footer />
       </div>
     </div>
   );
