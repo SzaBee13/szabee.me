@@ -79,10 +79,19 @@ export const Projects = () => {
       description: 'I just had an idea of creating a chat app, cause at the time we talked about backend.',
       tags: ['Javascript', 'Backend', 'Szabfun', 'Chat'],
       links: [
-        { label: 'Visit Page', url: 'https://my-first-backend-nine.vercel.app' },
+        { label: 'Visit Page', url: 'https://fun.szabee.me/chat' },
         { label: 'GitHub', url: 'https://github.com/SzaBee13/my-first-backend' },
       ],
     },
+    {
+      title: 'DoubleDoors Minecraft Plugin',
+      description: 'A Minecraft plugin that allows players to create double doors with a single block.',
+      tags: ['Java', 'Minecraft', 'Spigot'],
+      links: [
+        { label: 'GitHub', url: 'https://github.com/SzaBee13/DoubleDoors' },
+        { label: 'Modrinth', url: 'https://modrinth.com/plugin/double-doors-server' },
+      ]
+    }
   ];
 
   const getTagColor = (tag: string) => {
@@ -91,6 +100,21 @@ export const Projects = () => {
       'Python': { bg: 'bg-blue-100 dark:bg-blue-900', text: 'text-blue-800 dark:text-blue-300' },
       'Backend': { bg: 'bg-green-100 dark:bg-green-900', text: 'text-green-800 dark:text-green-300' },
       'Frontend': { bg: 'bg-green-100 dark:bg-green-900', text: 'text-green-800 dark:text-green-300' },
+      'Tools': { bg: 'bg-yellow-100 dark:bg-yellow-900', text: 'text-yellow-800 dark:text-yellow-300' },
+      'Utils': { bg: 'bg-yellow-100 dark:bg-yellow-900', text: 'text-yellow-800 dark:text-yellow-300' },
+      'Fun': { bg: 'bg-pink-100 dark:bg-pink-900', text: 'text-pink-800 dark:text-pink-300' },
+      'Programming Language': { bg: 'bg-purple-100 dark:bg-purple-900', text: 'text-purple-800 dark:text-purple-300' },
+      'Windows': { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-800 dark:text-gray-300' },
+      'Linux': { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-800 dark:text-gray-300' },
+      'MacOS': { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-800 dark:text-gray-300' },
+      'Client': { bg: 'bg-red-100 dark:bg-red-900', text: 'text-red-800 dark:text-red-300' },
+      'Fortnite': { bg: 'bg-red-100 dark:bg-red-900', text: 'text-red-800 dark:text-red-300' },
+      'LSMP': { bg: 'bg-indigo-100 dark:bg-indigo-900', text: 'text-indigo-800 dark:text-indigo-300' },
+      'OAuth': { bg: 'bg-indigo-100 dark:bg-indigo-900', text: 'text-indigo-800 dark:text-indigo-300' },
+      'Escape': { bg: 'bg-teal-100 dark:bg-teal-900', text: 'text-teal-800 dark:text-teal-300' },
+      'Szabfun': { bg: 'bg-pink-100 dark:bg-pink-900', text: 'text-pink-800 dark:text-pink-300' },
+      'Chat': { bg: 'bg-purple-100 dark:bg-purple-900', text: 'text-purple-800 dark:text-purple-300' },
+      'Spigot': { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-800 dark:text-gray-300' },
     };
     return colorMap[tag] || { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-800 dark:text-gray-300' };
   };
