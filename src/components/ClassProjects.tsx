@@ -1,4 +1,5 @@
 import { useTheme } from '../hooks/useTheme';
+import projectsData from '../assets/projects.json';
 
 interface ClassProject {
   title: string;
@@ -9,18 +10,7 @@ interface ClassProject {
 
 export const ClassProjects = () => {
   const { isDarkMode } = useTheme();
-
-  const classProjects: ClassProject[] = [
-    {
-      title: 'Day Guesser',
-      description: 'That days homework is to copy this (Coded by my teacher, more details at about)',
-      tags: ['Javascript', 'Guesser', 'Multi Language'],
-      links: [
-        { label: 'Visit Page', url: 'https://day-gueesr.vercel.app' },
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/Day-Guesser' },
-      ],
-    }
-  ];
+  const classProjects: ClassProject[] = projectsData.classProjects;
 
   const getTagColor = (tag: string) => {
     const colorMap: Record<string, { bg: string; text: string }> = {

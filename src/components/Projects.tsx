@@ -1,4 +1,5 @@
 import { useTheme } from '../hooks/useTheme';
+import projectsData from '../assets/projects.json';
 
 interface Project {
   title: string;
@@ -9,90 +10,7 @@ interface Project {
 
 export const Projects = () => {
   const { isDarkMode } = useTheme();
-
-  const projects: Project[] = [
-    {
-      title: 'Szabfun',
-      description: 'My first project that I actually cared about, even if no one was interested. It is a fun game where you can play with your friends and have fun.',
-      tags: ['Javascript', 'Backend', 'Fun'],
-      links: [
-        { label: 'Visit Page', url: 'https://fun.szabee.me' },
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/Szabfun' },
-        { label: 'GitHub Backend', url: 'https://github.com/SzaBee13/Szabfun-backend' },
-      ],
-    },
-    {
-      title: 'Alma Language',
-      description: 'I just had an idea to create a custom programming language that based on js.',
-      tags: ['Javascript', 'Programming Language', 'Windows', 'Linux', 'MacOS'],
-      links: [
-        { label: 'Visit Page', url: 'https://alma.szabee.me' },
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/alma-language' },
-      ],
-    },
-    {
-      title: "Dev Tools Powershell",
-      description: "Dev is a PowerShell function designed to simplify and streamline development workflows on Windows.",
-      tags: ['Powershell', 'Tools', 'Utils'],
-      links: [
-        { label: 'Visit Page', url: 'https://dev.szabee.me' },
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/dev-tools-ps' },
-      ]
-    },
-    {
-      title: 'Useful Py',
-      description: 'I just wanted to create a python tool, and i created.',
-      tags: ['Python', 'Tools', 'Input', 'Lists'],
-      links: [
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/useful-py' },
-      ],
-    },
-    {
-      title: 'Valkon Client',
-      description: 'Me and my friend wanted to create a Fortnite client. So we made it. This is my first public project.',
-      tags: ['Python', 'Client', 'Fortnite'],
-      links: [
-        { label: 'Visit Page', url: 'https://valkonclient.pages.dev' },
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/valkonclient' },
-      ],
-    },
-    {
-      title: 'LSMP "hack"',
-      description: 'It just a frontend to backend of LSMP.',
-      tags: ['Next.js', 'LSMP', 'OAuth'],
-      links: [
-        { label: 'Visit Page', url: 'https://lsmp-hack.vercel.app' },
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/lsmp-hack' },
-      ],
-    },
-    {
-      title: 'Escape Game Horror',
-      description: 'Our challenge is to create an escape game and here it is. It\'s also available on Szabfun.',
-      tags: ['Python', 'Escape', 'Szabfun'],
-      links: [
-        { label: 'Visit Page', url: 'https://fun.szabee.me/escape-game' },
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/Escape-game-horror' },
-      ],
-    },
-    {
-      title: 'Chat',
-      description: 'I just had an idea of creating a chat app, cause at the time we talked about backend.',
-      tags: ['Javascript', 'Backend', 'Szabfun', 'Chat'],
-      links: [
-        { label: 'Visit Page', url: 'https://fun.szabee.me/chat' },
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/my-first-backend' },
-      ],
-    },
-    {
-      title: 'DoubleDoors Minecraft Plugin',
-      description: 'A Minecraft plugin that allows players to create double doors with a single block.',
-      tags: ['Java', 'Minecraft', 'Spigot'],
-      links: [
-        { label: 'GitHub', url: 'https://github.com/SzaBee13/DoubleDoors' },
-        { label: 'Modrinth', url: 'https://modrinth.com/plugin/double-doors-server' },
-      ]
-    }
-  ];
+  const projects: Project[] = projectsData.projects;
 
   const getTagColor = (tag: string) => {
     const colorMap: Record<string, { bg: string; text: string }> = {
