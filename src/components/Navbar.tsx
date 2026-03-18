@@ -39,8 +39,8 @@ export const Navbar = () => {
         <li><a href="/#home" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Home</a></li>
         <li><a href="/#about" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">About</a></li>
         <li><a href="/#skills" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Skills</a></li>
-        <li><a href="/#projects" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Projects</a></li>
-        <li><a href="/#class" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Class Projects</a></li>
+        <li><a href="/projects" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Projects</a></li>
+        <li><a href="/projects/class" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Class Projects</a></li>
         <li><a href="/#socials" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Socials</a></li>
         <li><a href="/#now-playing-widget" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Now Playing</a></li>
         <li><a href="/blogs" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Blogs</a></li>
@@ -69,8 +69,8 @@ export const Navbar = () => {
           <li><a href="/#home" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Home</a></li>
           <li><a href="/#about" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">About</a></li>
           <li><a href="/#skills" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Skills</a></li>
-          <li><a href="/#projects" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Projects</a></li>
-          <li><a href="/#class" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Class Projects</a></li>
+          <li><a href="/projects" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Projects</a></li>
+          <li><a href="/projects/class" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Class Projects</a></li>
           <li><a href="/#socials" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Socials</a></li>
           <li><a href="/#now-playing-widget" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Now Playing</a></li>
           <li><a href="/blogs" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Blogs</a></li>
