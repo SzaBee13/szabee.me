@@ -1,0 +1,16 @@
+[
+  {
+    "projectSlug": "szabfun",
+    "slug": "launch",
+    "title": "Szabfun Launch",
+    "description": "First release of Szabfun with core gameplay mechanics",
+    "date": "2024-01-15"
+  },
+  {
+    "projectSlug": "alma-language",
+    "slug": "initial-release",
+    "title": "Alma Language Initial Release",
+    "description": "First public version of the Alma programming language",
+    "date": "2024-02-10"
+  }
+]

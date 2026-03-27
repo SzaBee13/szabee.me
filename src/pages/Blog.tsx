@@ -6,6 +6,7 @@ import blogMetadata from '../assets/blogs/Blogs.json';
 import { useTheme } from '../hooks/useTheme';
 import { Navbar } from '../components/Navbar';
 import Footer from '../components/Footer';
+import { RSSFeed } from '../components/RSSFeed';
 
 type BlogMetadata = {
   slug: string;
@@ -222,6 +223,9 @@ export default function Blog() {
           </article>
         )}
       </main>
+      <div className="max-w-4xl px-4 py-6 mx-auto">
+        <RSSFeed />
+      </div>
       <Footer />
     </div>
   );

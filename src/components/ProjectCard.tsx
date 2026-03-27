@@ -5,6 +5,7 @@ export interface ProjectLink {
 
 export interface ProjectItem {
 	title: string;
+	slug: string;
 	description: string;
 	tags: string[];
 	links?: ProjectLink[];
@@ -22,7 +23,10 @@ interface ProjectCardProps {
 	roomy?: boolean;
 }
 
+import { Link } from 'react-router-dom';
+
 export default function ProjectCard({ project, isDarkMode, getTagColor, roomy = false }: ProjectCardProps) {
+	
 	return (
 		<div
 			className={`${
@@ -88,6 +92,28 @@ export default function ProjectCard({ project, isDarkMode, getTagColor, roomy = 
 					})}
 				</div>
 			)}
+
+			{/* View Details Button */}
+			<Link
+				to={`/projects/${project.slug}`}
+				className={`${
+					roomy ? 'mt-6 px-4 py-2.5 font-medium' : 'mt-4 px-3 py-2'
+				} flex items-center justify-center gap-2 rounded text-sm font-medium transition ${
+					isDarkMode
+						? 'bg-purple-600 hover:bg-purple-700 text-white'
+						: 'bg-purple-500 hover:bg-purple-600 text-white'
+				}`}
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						strokeWidth={2}
+						d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
+					/>
+				</svg>
+				View Details
+			</Link>
 		</div>
 	);
 }

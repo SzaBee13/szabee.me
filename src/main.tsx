@@ -6,6 +6,7 @@ import App from './App.tsx'
 import { ShareNotFound } from './components/Share/404.tsx'
 import Blog from './pages/Blog.tsx'
 import ProjectsPage from './pages/Projects.tsx'
+import ProjectDetail from './pages/ProjectDetail.tsx'
 import ClassProjectsPage from './pages/ClassProjects.tsx'
 
 import { GitHub, Youtube, Twitch, Discord, DockerHub, Reddit } from './components/Share/Profiles.tsx'
@@ -28,6 +29,7 @@ createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/projects/:slug" element={<ProjectDetail />} />
         <Route path="/projects/class" element={<ClassProjectsPage />} />
         <Route path="/blogs" element={<Blog />} />
         <Route path="/blogs/:slug" element={<Blog />} />
