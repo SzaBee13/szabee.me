@@ -13,12 +13,16 @@ interface ProjectLink {
   url: string;
 }
 
+interface ProjectLinksObject {
+  github?: string;
+}
+
 interface Project {
   title: string;
   slug: string;
   description: string;
   tags: string[];
-  links?: ProjectLink[];
+  links?: ProjectLink[] | ProjectLinksObject;
 }
 
 interface ProjectBlogMetadata {
@@ -28,6 +32,35 @@ interface ProjectBlogMetadata {
   description: string;
   date: string;
 }
+
+interface GitHubRelease {
+  id: number;
+  html_url: string;
+  tag_name: string;
+  name: string | null;
+  body: string | null;
+  published_at: string;
+  draft: boolean;
+}
+
+type ProjectUpdate =
+  | {
+      kind: 'blog';
+      slug: string;
+      title: string;
+      description: string;
+      date: string;
+      blog: ProjectBlogMetadata;
+    }
+  | {
+      kind: 'release';
+      slug: string;
+      title: string;
+      description: string;
+      date: string;
+      releaseUrl: string;
+      body: string;
+    };
 
 const projectBlogModules = import.meta.glob('../assets/project-blogs/**/*.md', {
   query: '?raw',
@@ -63,11 +96,67 @@ function removeMatchingTopHeading(markdown: string, title: string): string {
   return markdown.slice(match[0].length).replace(/^\s*\r?\n/, '');
 }
 
+function getProjectLinks(project: Project): ProjectLink[] {
+  if (!project.links) {
+    return [];
+  }
+
+  if (Array.isArray(project.links)) {
+    return project.links;
+  }
+
+  const links: ProjectLink[] = [];
+  if (typeof project.links.github === 'string' && project.links.github.trim()) {
+    links.push({ label: 'GitHub', url: project.links.github.trim() });
+  }
+  return links;
+}
+
+function getGitHubRepoFromProject(project: Project): string | null {
+  const githubUrl = getProjectLinks(project)
+    .map((link) => link.url)
+    .find((url) => {
+      const normalized = url.toLowerCase();
+      return normalized.includes('github.com/') && !normalized.includes('/releases');
+    });
+
+  if (!githubUrl) {
+    return null;
+  }
+
+  try {
+    const parsed = new URL(githubUrl);
+    if (parsed.hostname !== 'github.com') {
+      return null;
+    }
+
+    const [owner, repo] = parsed.pathname.split('/').filter(Boolean);
+    if (!owner || !repo) {
+      return null;
+    }
+
+    return `${owner}/${repo}`;
+  } catch {
+    return null;
+  }
+}
+
+function buildReleaseDescription(body: string): string {
+  const trimmed = body.trim();
+  if (!trimmed) {
+    return 'Release published on GitHub.';
+  }
+
+  const singleLine = trimmed.replace(/\s+/g, ' ').slice(0, 180);
+  return singleLine.length < trimmed.length ? `${singleLine}...` : singleLine;
+}
+
 export default function ProjectDetail() {
   const { isDarkMode } = useTheme();
   const { slug } = useParams();
   const [contentHtml, setContentHtml] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [githubReleases, setGithubReleases] = useState<ProjectUpdate[]>([]);
 
   const allProjects: Project[] = useMemo(
     () => [...projectsData.projects, ...projectsData.classProjects],
@@ -83,6 +172,75 @@ export default function ProjectDetail() {
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [slug]);
 
+  const projectLinks = useMemo(() => (project ? getProjectLinks(project) : []), [project]);
+
+  const githubRepo = useMemo(() => (project ? getGitHubRepoFromProject(project) : null), [project]);
+
+  const projectUpdates = useMemo<ProjectUpdate[]>(() => {
+    const blogUpdates: ProjectUpdate[] = projectBlogs.map((blog) => ({
+      kind: 'blog',
+      slug: blog.slug,
+      title: blog.title,
+      description: blog.description,
+      date: blog.date,
+      blog,
+    }));
+
+    return [...blogUpdates, ...githubReleases].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
+  }, [projectBlogs, githubReleases]);
+
+  useEffect(() => {
+    if (!githubRepo) {
+      setGithubReleases([]);
+      return;
+    }
+
+    const controller = new AbortController();
+
+    (async () => {
+      try {
+        const response = await fetch(`https://api.github.com/repos/${githubRepo}/releases?per_page=10`, {
+          signal: controller.signal,
+          headers: {
+            Accept: 'application/vnd.github+json',
+          },
+        });
+
+        if (!response.ok) {
+          setGithubReleases([]);
+          return;
+        }
+
+        const releases = (await response.json()) as GitHubRelease[];
+        const normalized = releases
+          .filter((release) => !release.draft)
+          .map<ProjectUpdate>((release) => {
+            const releaseTitle = release.name?.trim() || release.tag_name;
+            const releaseBody = release.body ?? '';
+            return {
+              kind: 'release',
+              slug: `release-${release.id}`,
+              title: `${releaseTitle} (GitHub Release)`,
+              description: buildReleaseDescription(releaseBody),
+              date: release.published_at,
+              releaseUrl: release.html_url,
+              body: releaseBody,
+            };
+          });
+
+        setGithubReleases(normalized);
+      } catch {
+        setGithubReleases([]);
+      }
+    })();
+
+    return () => {
+      controller.abort();
+    };
+  }, [githubRepo]);
+
   useEffect(() => {
     if (!project) {
       setContentHtml('');
@@ -90,39 +248,55 @@ export default function ProjectDetail() {
       return;
     }
 
-    if (projectBlogs.length === 0) {
+    if (projectUpdates.length === 0) {
       setContentHtml('');
       setIsLoading(false);
       return;
     }
 
-    const firstBlog = projectBlogs[0];
-    const markdownPath = `../assets/project-blogs/${firstBlog.projectSlug}/${firstBlog.slug}.md`;
-    const loadMarkdown = projectBlogModules[markdownPath];
-
-    if (!loadMarkdown) {
-      setContentHtml('');
-      setIsLoading(false);
-      return;
-    }
+    const firstUpdate = projectUpdates[0];
 
     let isMounted = true;
     setIsLoading(true);
 
     (async () => {
-      const raw = (await loadMarkdown()) as string;
-      const cleanedMarkdown = removeMatchingTopHeading(raw, firstBlog.title);
-      const rendered = await marked.parse(cleanedMarkdown);
-      if (isMounted) {
-        setContentHtml(DOMPurify.sanitize(rendered));
-        setIsLoading(false);
+      try {
+        if (firstUpdate.kind === 'blog') {
+          const markdownPath = `../assets/project-blogs/${firstUpdate.blog.projectSlug}/${firstUpdate.blog.slug}.md`;
+          const loadMarkdown = projectBlogModules[markdownPath];
+          if (!loadMarkdown) {
+            setContentHtml('');
+            setIsLoading(false);
+            return;
+          }
+
+          const raw = (await loadMarkdown()) as string;
+          const cleanedMarkdown = removeMatchingTopHeading(raw, firstUpdate.blog.title);
+          const rendered = await marked.parse(cleanedMarkdown);
+          if (isMounted) {
+            setContentHtml(DOMPurify.sanitize(rendered));
+            setIsLoading(false);
+          }
+          return;
+        }
+
+        const rendered = await marked.parse(firstUpdate.body || '_No release notes provided._');
+        if (isMounted) {
+          setContentHtml(DOMPurify.sanitize(rendered));
+          setIsLoading(false);
+        }
+      } catch {
+        if (isMounted) {
+          setContentHtml('');
+          setIsLoading(false);
+        }
       }
     })();
 
     return () => {
       isMounted = false;
     };
-  }, [project, projectBlogs]);
+  }, [project, projectUpdates]);
 
   const pageClasses = isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
   const cardClasses = isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white';
@@ -226,9 +400,9 @@ export default function ProjectDetail() {
           </div>
 
           {/* Links */}
-          {project.links && project.links.length > 0 && (
+          {projectLinks.length > 0 && (
             <div className="flex flex-col gap-3 mb-8 md:flex-row md:gap-4">
-              {project.links.map((link) => {
+              {projectLinks.map((link) => {
                 const isGitHub = link.label.toLowerCase().includes('github');
                 const isVisit = link.label.toLowerCase().includes('visit');
                 return (
@@ -277,21 +451,33 @@ export default function ProjectDetail() {
         </article>
 
         {/* Project Updates/Blog Section */}
-        {projectBlogs.length > 0 && (
+        {projectUpdates.length > 0 && (
           <section>
             <h2 className="mb-6 text-3xl font-bold">Project Updates</h2>
 
             {/* Latest Blog Post */}
-            {contentHtml && projectBlogs[0] && (
+            {contentHtml && projectUpdates[0] && (
               <article className={`rounded-xl border p-6 mb-8 ${cardClasses}`}>
-                <h3 className="mb-2 text-2xl font-semibold">{projectBlogs[0].title}</h3>
+                <h3 className="mb-2 text-2xl font-semibold">{projectUpdates[0].title}</h3>
                 <p className={`mb-4 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                  {new Date(projectBlogs[0].date).toLocaleDateString('en-US', {
+                  {new Date(projectUpdates[0].date).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
                   })}
                 </p>
+                {projectUpdates[0].kind === 'release' && (
+                  <p className="mb-4">
+                    <a
+                      href={projectUpdates[0].releaseUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-blue-500 hover:underline"
+                    >
+                      View release on GitHub
+                    </a>
+                  </p>
+                )}
                 {isLoading ? (
                   <p>Loading post...</p>
                 ) : (
@@ -304,24 +490,34 @@ export default function ProjectDetail() {
             )}
 
             {/* All Project Blogs */}
-            {projectBlogs.length > 1 && (
+            {projectUpdates.length > 1 && (
               <div>
                 <h3 className="mb-4 text-xl font-semibold">All Updates</h3>
                 <div className="grid gap-4">
-                  {projectBlogs.slice(1).map((blog) => (
+                  {projectUpdates.slice(1).map((update) => (
                     <article
-                      key={blog.slug}
+                      key={update.slug}
                       className={`rounded-xl border p-4 transition-shadow hover:shadow-lg ${cardClasses}`}
                     >
                       <p className={`mb-2 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                        {new Date(blog.date).toLocaleDateString('en-US', {
+                        {new Date(update.date).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric',
                         })}
                       </p>
-                      <h4 className="mb-2 text-lg font-semibold">{blog.title}</h4>
-                      <p className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>{blog.description}</p>
+                      <h4 className="mb-2 text-lg font-semibold">{update.title}</h4>
+                      <p className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>{update.description}</p>
+                      {update.kind === 'release' && (
+                        <a
+                          href={update.releaseUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block mt-3 font-semibold text-blue-500 hover:underline"
+                        >
+                          Open release notes
+                        </a>
+                      )}
                     </article>
                   ))}
                 </div>

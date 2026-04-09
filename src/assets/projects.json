@@ -85,7 +85,8 @@
 			"tags": ["Java", "Minecraft", "Spigot"],
 			"links": [
 				{ "label": "GitHub", "url": "https://github.com/SzaBee13/double-doors-spigot" },
-				{ "label": "Modrinth", "url": "https://modrinth.com/plugin/double-doors-server" }
+				{ "label": "Modrinth", "url": "https://modrinth.com/plugin/double-doors-server" },
+				{ "label": "FastStats", "url": "https://faststats.dev/project/double-doors-server/minecraft-plugin" }
 			]
 		}
 	],
