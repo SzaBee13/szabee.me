@@ -7,6 +7,7 @@ import { useTheme } from '../hooks/useTheme';
 import { Navbar } from '../components/Navbar';
 import Footer from '../components/Footer';
 import { RSSFeed } from '../components/RSSFeed';
+import { PageMeta } from '../components/PageMeta';
 
 type BlogMetadata = {
   slug: string;
@@ -121,6 +122,11 @@ export default function Blog() {
   if (!slug) {
     return (
       <div className={`min-h-screen ${pageClasses}`}>
+        <PageMeta
+          title="Blogs | SzaBee13"
+          description="Notes, experiments, and updates from SzaBee13."
+          path="/blogs"
+        />
         <Navbar />
 
         <main className="max-w-4xl px-4 py-10 pt-16 mx-auto">
@@ -189,6 +195,13 @@ export default function Blog() {
 
   return (
     <div className={`min-h-screen ${pageClasses}`}>
+      <PageMeta
+        title={selectedBlog ? `${selectedBlog.title} | SzaBee13` : 'Blog not found | SzaBee13'}
+        description={selectedBlog?.description ?? `No post exists for slug: ${slug}`}
+        path={selectedBlog ? `/blogs/${selectedBlog.slug}` : '/blogs'}
+        type="article"
+        noIndex={!selectedBlog}
+      />
       <Navbar />
 
       <main className="max-w-4xl px-4 py-10 mx-auto">

@@ -4,6 +4,7 @@ import { Navbar } from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProjectCard from '../components/ProjectCard';
 import type { ProjectItem } from '../components/ProjectCard';
+import { PageMeta } from '../components/PageMeta';
 
 export default function ProjectsPage() {
   const { isDarkMode } = useTheme();
@@ -36,6 +37,11 @@ export default function ProjectsPage() {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+      <PageMeta
+        title="Projects | SzaBee13"
+        description="Browse development projects, tools, and experiments by SzaBee13."
+        path="/projects"
+      />
       <Navbar />
       <main className="pt-16">
         <section

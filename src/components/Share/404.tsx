@@ -1,5 +1,6 @@
 
 import { useTheme } from '../../hooks/useTheme';
+import { PageMeta } from '../PageMeta';
 
 function resolveSlug(): string | null {
   // Prefer explicit ?slug= query param
@@ -34,6 +35,12 @@ export function ShareNotFound() {
         isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'
       }`}
     >
+      <PageMeta
+        title="Short Link Not Found | SzaBee13"
+        description="The requested short link does not exist or has been removed."
+        path="/share/404"
+        noIndex
+      />
       <div className="max-w-md text-center">
         <p className={`text-6xl font-extrabold mb-4 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>404</p>
         <h1 className="mb-2 text-2xl font-bold">Short link not found</h1>

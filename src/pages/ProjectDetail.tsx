@@ -7,6 +7,7 @@ import projectBlogsData from '../assets/project-blogs/ProjectBlogs.json';
 import { useTheme } from '../hooks/useTheme';
 import { Navbar } from '../components/Navbar';
 import Footer from '../components/Footer';
+import { PageMeta } from '../components/PageMeta';
 
 interface ProjectLink {
   label: string;
@@ -331,9 +332,20 @@ export default function ProjectDetail() {
     return colorMap[tag] || { bg: isDarkMode ? 'bg-gray-800' : 'bg-gray-100', text: isDarkMode ? 'text-gray-300' : 'text-gray-800' };
   };
 
+  const pageTitle = project ? `${project.title} | SzaBee13` : 'Project not found | SzaBee13';
+  const pageDescription = project ? project.description : `No project exists for slug: ${slug}`;
+  const pagePath = project ? `/projects/${project.slug}` : '/projects';
+
   if (!project) {
     return (
       <div className={`min-h-screen ${pageClasses}`}>
+        <PageMeta
+          title={pageTitle}
+          description={pageDescription}
+          path={pagePath}
+          type="article"
+          noIndex
+        />
         <Navbar />
         <main className="max-w-4xl px-4 py-10 pt-16 mx-auto">
           <div className="p-5 border rounded-xl border-red-400/40 bg-red-500/10">
@@ -351,6 +363,7 @@ export default function ProjectDetail() {
 
   return (
     <div className={`min-h-screen ${pageClasses}`}>
+      <PageMeta title={pageTitle} description={pageDescription} path={pagePath} type="article" />
       <Navbar />
 
       <main className="max-w-4xl px-4 py-10 pt-16 mx-auto">

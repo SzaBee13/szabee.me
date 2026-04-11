@@ -4,6 +4,7 @@ import { Navbar } from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProjectCard from '../components/ProjectCard';
 import type { ProjectItem } from '../components/ProjectCard';
+import { PageMeta } from '../components/PageMeta';
 
 export default function ClassProjectsPage() {
   const { isDarkMode } = useTheme();
@@ -20,6 +21,11 @@ export default function ClassProjectsPage() {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+      <PageMeta
+        title="Class Projects | SzaBee13"
+        description="A collection of class projects built by SzaBee13."
+        path="/projects/class"
+      />
       <Navbar />
       <main className="pt-16">
         <section
