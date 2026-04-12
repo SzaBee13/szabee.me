@@ -6,13 +6,13 @@
     <description>Personal blog by Szabolcs Győrffy (SzaBee13). Posts about development, coding, and technology.</description>
     <language>en-us</language>
     <atom:link href="https://szabee.me/rss.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Thu, 09 Apr 2026 07:17:04 GMT</lastBuildDate>
-    <pubDate>Thu, 09 Apr 2026 07:17:04 GMT</pubDate>
+    <lastBuildDate>Sun, 12 Apr 2026 11:26:23 GMT</lastBuildDate>
+    <pubDate>Sun, 12 Apr 2026 11:26:23 GMT</pubDate>
 
     <item>
       <title>Microslop</title>
-      <link>https://szabee.me/blog/microslop</link>
-      <guid isPermaLink="true">https://szabee.me/blog/microslop</guid>
+      <link>https://szabee.me/blogs/microslop</link>
+      <guid isPermaLink="true">https://szabee.me/blogs/microslop</guid>
       <pubDate>Tue, 17 Mar 2026 00:00:00 GMT</pubDate>
       <description>This is why i hate Microsoft
 

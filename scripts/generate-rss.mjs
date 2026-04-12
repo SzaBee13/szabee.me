@@ -66,8 +66,8 @@ function generateRSSFeed(blogs) {
 
   blogs.forEach((blog) => {
     const pubDate = new Date(blog.date).toUTCString();
-    const link = `${SITE_URL}/blog/${blog.slug}`;
-    const guid = `${SITE_URL}/blog/${blog.slug}`;
+    const link = `${SITE_URL}/blogs/${blog.slug}`;
+    const guid = `${SITE_URL}/blogs/${blog.slug}`;
 
     let contentHtml = escapeXml(stripMarkdown(blog.description));
     if (blog.tags && blog.tags.length > 0) {
@@ -128,4 +128,6 @@ export function generateRSSFile() {
   }
 }
 
-generateRSSFile();
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  generateRSSFile();
+}

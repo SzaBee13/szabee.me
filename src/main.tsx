@@ -8,6 +8,7 @@ import Blog from './pages/Blog.tsx'
 import ProjectsPage from './pages/Projects.tsx'
 import ProjectDetail from './pages/ProjectDetail.tsx'
 import ClassProjectsPage from './pages/ClassProjects.tsx'
+import AdminPage from './pages/Admin.tsx'
 
 import { GitHub, Youtube, Twitch, Discord, DockerHub, Reddit } from './components/Share/Profiles.tsx'
 
@@ -33,6 +34,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/projects/class" element={<ClassProjectsPage />} />
         <Route path="/blogs" element={<Blog />} />
         <Route path="/blogs/:slug" element={<Blog />} />
+        <Route path="/admin" element={<AdminPage />} />
         <Route path="/share/404" element={<ShareNotFound />} />
         <Route path="/github" element={<ExternalProfileRoute openProfile={GitHub} />} />
         <Route path="/youtube" element={<ExternalProfileRoute openProfile={Youtube} />} />
