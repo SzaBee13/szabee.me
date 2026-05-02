@@ -35,7 +35,7 @@ export const Navbar = () => {
       </div>
 
       {/* Center: Page Selector */}
-      <ul className="hidden md:flex md:space-x-6">
+      <ul className="hidden lg:flex lg:space-x-6">
         <li><a href="/#home" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Home</a></li>
         <li><a href="/#about" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">About</a></li>
         <li><a href="/#skills" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Skills</a></li>
@@ -49,6 +49,8 @@ export const Navbar = () => {
       {/* Right: Theme Selector and Hamburger Menu */}
       <div className="flex items-center space-x-4">
         <button
+          type="button"
+          aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           onClick={toggleTheme}
           className={`p-2 rounded ${isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-300'}`}
         >
@@ -56,8 +58,11 @@ export const Navbar = () => {
         </button>
 
         <button
+          type="button"
+          aria-label="Toggle navigation menu"
+          aria-expanded={mobileMenuOpen}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className={`md:hidden p-2 rounded ${isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-300'}`}
+          className={`lg:hidden p-2 rounded ${isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-300'}`}
         >
           ☰
         </button>
@@ -65,7 +70,7 @@ export const Navbar = () => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <ul className="absolute left-0 flex flex-col w-full p-4 space-y-2 bg-gray-800 md:hidden top-16">
+        <ul className="absolute left-0 flex flex-col w-full p-4 space-y-2 bg-gray-800 lg:hidden top-16">
           <li><a href="/#home" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Home</a></li>
           <li><a href="/#about" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">About</a></li>
           <li><a href="/#skills" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Skills</a></li>

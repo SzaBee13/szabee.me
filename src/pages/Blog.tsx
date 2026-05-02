@@ -121,7 +121,7 @@ export default function Blog() {
 
   if (!slug) {
     return (
-      <div className={`min-h-screen ${pageClasses}`}>
+      <div className={`flex min-h-screen flex-col overflow-x-hidden ${pageClasses}`}>
         <PageMeta
           title="Blogs | SzaBee13"
           description="Notes, experiments, and updates from SzaBee13."
@@ -129,7 +129,7 @@ export default function Blog() {
         />
         <Navbar />
 
-        <main className="max-w-4xl px-4 py-10 pt-16 mx-auto">
+        <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-10 pt-16">
           <h1 className="mb-2 text-4xl font-bold">Blogs</h1>
           <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-8`}>
             Notes, experiments, and updates.
@@ -194,7 +194,7 @@ export default function Blog() {
   }
 
   return (
-    <div className={`min-h-screen ${pageClasses}`}>
+    <div className={`flex min-h-screen flex-col overflow-x-hidden ${pageClasses}`}>
       <PageMeta
         title={selectedBlog ? `${selectedBlog.title} | SzaBee13` : 'Blog not found | SzaBee13'}
         description={selectedBlog?.description ?? `No post exists for slug: ${slug}`}
@@ -204,7 +204,7 @@ export default function Blog() {
       />
       <Navbar />
 
-      <main className="max-w-4xl px-4 py-10 mx-auto">
+      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-10 pt-20">
         {!selectedBlog && (
           <div className="p-5 border rounded-xl border-red-400/40 bg-red-500/10">
             <h1 className="mb-2 text-2xl font-bold">Blog not found</h1>

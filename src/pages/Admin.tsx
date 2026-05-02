@@ -91,6 +91,13 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
 
   const text = await response.text();
   const snippet = text.trim().slice(0, 200);
+
+  if (snippet.startsWith('<!DOCTYPE html>') || snippet.startsWith('<html')) {
+    throw new Error(
+      'Admin API returned the app page instead of JSON. Restart the Vite dev server so /api/admin routes are registered.',
+    );
+  }
+
   throw new Error(`Expected JSON but got ${contentType || 'unknown content-type'}: ${snippet}`);
 }
 
@@ -533,7 +540,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className={`relative min-h-screen overflow-hidden ${isDarkMode ? 'bg-gray-950 text-white' : 'bg-slate-50 text-gray-900'}`}>
+    <div className={`relative flex min-h-screen flex-col overflow-x-hidden ${isDarkMode ? 'bg-gray-950 text-white' : 'bg-slate-50 text-gray-900'}`}>
       <div
         className={`pointer-events-none absolute inset-0 -z-10 ${
           isDarkMode
@@ -549,7 +556,7 @@ export default function AdminPage() {
       />
       <Navbar />
 
-      <main className="max-w-7xl px-4 py-10 mx-auto pt-20">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-10 pt-20">
         <section className={`rounded-3xl border p-6 md:p-8 ${panelClasses}`}>
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="min-w-0">

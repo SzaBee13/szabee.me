@@ -165,6 +165,7 @@ export default defineConfig({
     react(),
     {
       name: 'admin-api',
+      enforce: 'pre',
       apply: 'serve',
       configureServer(server) {
         const handler = createAdminApiHandler(() => {
