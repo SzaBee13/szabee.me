@@ -15,18 +15,24 @@ interface Track {
   };
 }
 
-export const NowPlaying = () => {
+type NowPlayingProps = {
+  className?: string;
+};
+
+export const NowPlaying = ({ className = 'my-8' }: NowPlayingProps) => {
   const [trackTitle, setTrackTitle] = useState('Nothing playing');
   const [trackArtist, setTrackArtist] = useState('');
   const [trackArt, setTrackArt] = useState('');
   const [trackUrl, setTrackUrl] = useState('#');
   const [artistUrl, setArtistUrl] = useState('#');
 
+  const apiKey = import.meta.env.VITE_LASTFM_API_KEY;
+
   useEffect(() => {
     const updateNowPlaying = async () => {
       try {
         const apiUrl =
-          'https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=SzaBee13&api_key=01981f06015a661e31fc32a8befeb459&format=json&limit=1';
+          `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=SzaBee13&api_key=${apiKey}&format=json&limit=1`;
         const res = await fetch(apiUrl);
         const data = await res.json();
         const track: Track = data?.recenttracks?.track?.[0];
@@ -72,16 +78,16 @@ export const NowPlaying = () => {
   }, []);
 
   return (
-    <div id="now-playing-widget" className="flex flex-col items-center my-8">
-      <div className="bg-white dark:bg-gray-700 rounded-lg p-6 shadow-lg w-full md:w-96">
-        {trackArt && <img src={trackArt} alt="Album art" className="w-full h-auto rounded-lg mb-4" />}
-        <h3 className="text-lg font-bold mb-2">
+    <div id="now-playing-widget" className={`flex flex-col items-center ${className}`}>
+      <div className="w-full p-6 bg-white rounded-lg shadow-lg dark:bg-gray-700 md:w-96">
+        {trackArt && <img src={trackArt} alt="Album art" className="w-full h-auto mb-4 rounded-lg" />}
+        <h3 className="mb-2 text-lg font-bold">
           <a href={trackUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
             {trackTitle}
           </a>
         </h3>
         {trackArtist && (
-          <p className="text-sm mb-2">
+          <p className="mb-2 text-sm">
             <a href={artistUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
               {trackArtist}
             </a>

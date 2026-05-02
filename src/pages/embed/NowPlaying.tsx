@@ -53,7 +53,7 @@ export default function NowPlayingEmbed() {
   return (
     <div className={isDark ? 'dark' : ''}>
       <div className={isDark ? 'min-h-screen bg-gray-900 text-white' : 'min-h-screen bg-white text-gray-900'}>
-        <NowPlaying />
+        <NowPlaying className="my-0" />
       </div>
     </div>
   )

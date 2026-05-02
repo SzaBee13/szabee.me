@@ -1,6 +1,6 @@
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import { ShareNotFound } from './components/Share/404.tsx'
@@ -9,7 +9,7 @@ import ProjectsPage from './pages/Projects.tsx'
 import ProjectDetail from './pages/ProjectDetail.tsx'
 import ClassProjectsPage from './pages/ClassProjects.tsx'
 import AdminPage from './pages/Admin.tsx'
-import NowPlayingEmbed from './pages/embed/file.tsx'
+import NowPlayingEmbed from './pages/embed/NowPlaying.tsx'
 
 import { GitHub, Youtube, Twitch, Discord, DockerHub, Reddit } from './components/Share/Profiles.tsx'
 
@@ -25,9 +25,29 @@ function ExternalProfileRoute({ openProfile }: ExternalProfileRouteProps) {
   return null
 }
 
+function HashScroller() {
+  const { pathname, hash } = useLocation()
+
+  useEffect(() => {
+    if (!hash) {
+      return
+    }
+
+    const targetId = decodeURIComponent(hash.slice(1))
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById(targetId)?.scrollIntoView({ block: 'start' })
+    })
+
+    return () => window.cancelAnimationFrame(frame)
+  }, [pathname, hash])
+
+  return null
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
+      <HashScroller />
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/projects" element={<ProjectsPage />} />

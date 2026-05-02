@@ -82,6 +82,18 @@ function randomString(length = 64): string {
   return toBase64Url(bytes).slice(0, length);
 }
 
+async function readJsonResponse<T>(response: Response): Promise<T> {
+  const contentType = response.headers.get('content-type') ?? '';
+
+  if (contentType.includes('application/json')) {
+    return (await response.json()) as T;
+  }
+
+  const text = await response.text();
+  const snippet = text.trim().slice(0, 200);
+  throw new Error(`Expected JSON but got ${contentType || 'unknown content-type'}: ${snippet}`);
+}
+
 function initialBlog(): BlogItem {
   const today = new Date().toISOString().slice(0, 10);
   return {
@@ -131,12 +143,12 @@ export default function AdminPage() {
   const [saveStatus, setSaveStatus] = useState('');
 
   const panelClasses = isDarkMode
-    ? 'bg-gray-900 text-white border-gray-700'
-    : 'bg-white text-gray-900 border-gray-200';
+    ? 'bg-gray-900/95 text-white border-gray-700 shadow-[0_12px_40px_rgba(0,0,0,0.35)]'
+    : 'bg-white/95 text-gray-900 border-gray-200 shadow-[0_12px_40px_rgba(15,23,42,0.12)]';
 
   const cardClasses = isDarkMode
-    ? 'bg-gray-800 border-gray-700 text-white'
-    : 'bg-white border-gray-200 text-gray-900';
+    ? 'bg-gray-800/90 border-gray-700 text-white'
+    : 'bg-white/90 border-gray-200 text-gray-900';
 
   const authorized = useMemo(() => {
     if (!currentUser) {
@@ -226,11 +238,11 @@ export default function AdminPage() {
         }),
       });
 
-      const payload = (await response.json()) as {
+      const payload = await readJsonResponse<{
         access_token?: string;
         refresh_token?: string;
         error?: string;
-      };
+      }>(response);
 
       if (!response.ok || !payload.access_token) {
         throw new Error(payload.error ?? 'Token exchange failed.');
@@ -274,7 +286,7 @@ export default function AdminPage() {
       return;
     }
 
-    const user = (await response.json()) as OAuthUser;
+    const user = await readJsonResponse<OAuthUser>(response);
     setCurrentUser(user);
 
     if (
@@ -335,7 +347,7 @@ export default function AdminPage() {
 
     try {
       const response = await fetch('/api/admin/content');
-      const payload = (await response.json()) as AdminContent | { error: string };
+      const payload = await readJsonResponse<AdminContent | { error: string }>(response);
       if (!response.ok || 'error' in payload) {
         throw new Error('error' in payload ? payload.error : 'Could not load admin content.');
       }
@@ -405,7 +417,7 @@ export default function AdminPage() {
         }),
       });
 
-      const payload = (await response.json()) as { error?: string };
+      const payload = await readJsonResponse<{ error?: string }>(response);
       if (!response.ok) {
         throw new Error(payload.error ?? 'Could not save blog.');
       }
@@ -434,7 +446,7 @@ export default function AdminPage() {
         method: 'DELETE',
       });
 
-      const payload = (await response.json()) as { error?: string };
+      const payload = await readJsonResponse<{ error?: string }>(response);
       if (!response.ok) {
         throw new Error(payload.error ?? 'Could not delete blog.');
       }
@@ -465,7 +477,7 @@ export default function AdminPage() {
         }),
       });
 
-      const payload = (await response.json()) as { error?: string };
+      const payload = await readJsonResponse<{ error?: string }>(response);
       if (!response.ok) {
         throw new Error(payload.error ?? 'Could not save project.');
       }
@@ -494,7 +506,7 @@ export default function AdminPage() {
         `/api/admin/projects/${projectSection}/${encodeURIComponent(selectedProjectSlug)}`,
         { method: 'DELETE' },
       );
-      const payload = (await response.json()) as { error?: string };
+      const payload = await readJsonResponse<{ error?: string }>(response);
       if (!response.ok) {
         throw new Error(payload.error ?? 'Could not delete project.');
       }
@@ -510,7 +522,7 @@ export default function AdminPage() {
     setSaveStatus('Running sync...');
     try {
       const response = await fetch('/api/admin/sync', { method: 'POST' });
-      const payload = (await response.json()) as { error?: string };
+      const payload = await readJsonResponse<{ error?: string }>(response);
       if (!response.ok) {
         throw new Error(payload.error ?? 'Sync failed.');
       }
@@ -521,7 +533,14 @@ export default function AdminPage() {
   }
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+    <div className={`relative min-h-screen overflow-hidden ${isDarkMode ? 'bg-gray-950 text-white' : 'bg-slate-50 text-gray-900'}`}>
+      <div
+        className={`pointer-events-none absolute inset-0 -z-10 ${
+          isDarkMode
+            ? 'bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_rgba(15,23,42,0.75)_45%,_rgba(2,6,23,1)_80%)]'
+            : 'bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_rgba(226,232,240,0.7)_45%,_rgba(248,250,252,1)_80%)]'
+        }`}
+      />
       <PageMeta
         title="Admin | SzaBee13"
         description="Private admin panel to manage blogs and projects."
@@ -531,14 +550,18 @@ export default function AdminPage() {
       <Navbar />
 
       <main className="max-w-7xl px-4 py-10 mx-auto pt-20">
-        <section className={`rounded-2xl border p-5 ${panelClasses}`}>
-          <h1 className="text-3xl font-bold">Admin Panel</h1>
-          <p className={`mt-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-            Sign in with SzaBee OAuth. Access is restricted to your UUID/email.
-          </p>
+        <section className={`rounded-3xl border p-6 md:p-8 ${panelClasses}`}>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h1 className="text-3xl font-bold md:text-4xl">Admin Panel</h1>
+              <p className={`mt-2 max-w-2xl ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Sign in with SzaBee OAuth. Access is restricted to your UUID/email.
+              </p>
+            </div>
+          </div>
 
           <div className="grid gap-4 mt-6">
-            <p className={`rounded-lg border px-3 py-2 text-sm ${cardClasses}`}>
+            <p className={`rounded-xl border px-3 py-2 text-sm ${cardClasses} break-words`}>
               OAuth client ID source: <strong>.env</strong> via VITE_PUBLIC_SZABEE_OAUTH_CLIENT_ID
             </p>
             {!currentUser ? (
@@ -547,7 +570,7 @@ export default function AdminPage() {
                 onClick={() => {
                   void startOAuthSignIn();
                 }}
-                className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-lg h-fit mt-7 hover:bg-blue-500 disabled:opacity-60"
+                className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-xl h-fit mt-4 hover:bg-blue-500 disabled:opacity-60"
                 disabled={isAuthorizing}
               >
                 {isAuthorizing ? 'Signing In...' : 'Sign In with SzaBee OAuth'}
@@ -556,7 +579,7 @@ export default function AdminPage() {
               <button
                 type="button"
                 onClick={clearAuth}
-                className="px-4 py-2 font-semibold text-white bg-red-600 rounded-lg h-fit mt-7 hover:bg-red-500"
+                className="px-4 py-2 font-semibold text-white bg-red-600 rounded-xl h-fit mt-4 hover:bg-red-500"
               >
                 Sign Out
               </button>
@@ -564,26 +587,26 @@ export default function AdminPage() {
           </div>
 
           {!!currentUser && (
-            <div className={`mt-4 rounded-lg border p-3 ${cardClasses}`}>
+            <div className={`mt-4 rounded-xl border p-4 ${cardClasses}`}>
               <p>
                 Signed in as <strong>{currentUser.display_name}</strong> ({currentUser.email})
               </p>
-              <p className="text-sm opacity-80">UUID: {currentUser.uuid}</p>
+              <p className="text-sm opacity-80 break-all">UUID: {currentUser.uuid}</p>
               {!!refreshToken && <p className="text-sm opacity-80">Refresh token stored.</p>}
             </div>
           )}
 
-          {!!authError && <p className="mt-4 font-semibold text-red-400">{authError}</p>}
+          {!!authError && <p className="mt-4 font-semibold text-red-400 break-words">{authError}</p>}
         </section>
 
         {authorized && (
-          <section className="grid gap-6 mt-8 lg:grid-cols-2">
-            <article className={`rounded-2xl border p-5 ${panelClasses}`}>
+          <section className="grid gap-6 mt-8 lg:grid-cols-2 lg:items-start">
+            <article className={`min-w-0 rounded-3xl border p-6 ${panelClasses}`}>
               <div className="flex items-center justify-between gap-3">
                 <h2 className="text-2xl font-semibold">Blogs</h2>
                 <button
                   type="button"
-                  className="px-3 py-2 text-sm font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-500"
+                  className="px-3 py-2 text-sm font-semibold text-white bg-emerald-600 rounded-xl hover:bg-emerald-500"
                   onClick={() => {
                     const fresh = initialBlog();
                     setSelectedBlogSlug('');
@@ -600,7 +623,7 @@ export default function AdminPage() {
                   <select
                     value={selectedBlogSlug}
                     onChange={(event) => selectBlog(event.target.value)}
-                    className={`mt-1 w-full rounded-lg border px-3 py-2 ${cardClasses}`}
+                    className={`mt-1 w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                   >
                     <option value="">Select blog...</option>
                     {(content?.blogs ?? []).map((blog) => (
@@ -615,49 +638,49 @@ export default function AdminPage() {
                   value={blogDraft.title}
                   onChange={(event) => setBlogDraft((prev) => ({ ...prev, title: event.target.value }))}
                   placeholder="Title"
-                  className={`rounded-lg border px-3 py-2 ${cardClasses}`}
+                  className={`w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                   required
                 />
                 <input
                   value={blogDraft.slug}
                   onChange={(event) => setBlogDraft((prev) => ({ ...prev, slug: event.target.value }))}
                   placeholder="slug-like-this"
-                  className={`rounded-lg border px-3 py-2 ${cardClasses}`}
+                  className={`w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                   required
                 />
                 <input
                   value={blogDraft.description}
                   onChange={(event) => setBlogDraft((prev) => ({ ...prev, description: event.target.value }))}
                   placeholder="Description"
-                  className={`rounded-lg border px-3 py-2 ${cardClasses}`}
+                  className={`w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                   required
                 />
                 <input
                   type="date"
                   value={blogDraft.date}
                   onChange={(event) => setBlogDraft((prev) => ({ ...prev, date: event.target.value }))}
-                  className={`rounded-lg border px-3 py-2 ${cardClasses}`}
+                  className={`w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                   required
                 />
                 <input
                   value={toTagString(blogDraft.tags)}
                   onChange={(event) => setBlogDraft((prev) => ({ ...prev, tags: parseTags(event.target.value) }))}
                   placeholder="tags, separated, by, commas"
-                  className={`rounded-lg border px-3 py-2 ${cardClasses}`}
+                  className={`w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                 />
                 <textarea
                   value={blogDraft.content}
                   onChange={(event) => setBlogDraft((prev) => ({ ...prev, content: event.target.value }))}
                   placeholder="Markdown content"
-                  className={`min-h-64 rounded-lg border px-3 py-2 font-mono text-sm ${cardClasses}`}
+                  className={`min-h-64 w-full rounded-xl border px-3 py-2 font-mono text-sm ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                 />
 
                 <div className="flex gap-3">
-                  <button className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-500" type="submit">
+                  <button className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-500" type="submit">
                     Save Blog
                   </button>
                   <button
-                    className="px-4 py-2 font-semibold text-white bg-red-600 rounded-lg hover:bg-red-500 disabled:opacity-50"
+                    className="px-4 py-2 font-semibold text-white bg-red-600 rounded-xl hover:bg-red-500 disabled:opacity-50"
                     type="button"
                     onClick={() => {
                       void removeBlog();
@@ -670,12 +693,12 @@ export default function AdminPage() {
               </form>
             </article>
 
-            <article className={`rounded-2xl border p-5 ${panelClasses}`}>
+            <article className={`min-w-0 rounded-3xl border p-6 ${panelClasses}`}>
               <div className="flex items-center justify-between gap-3">
                 <h2 className="text-2xl font-semibold">Projects</h2>
                 <button
                   type="button"
-                  className="px-3 py-2 text-sm font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-500"
+                  className="px-3 py-2 text-sm font-semibold text-white bg-emerald-600 rounded-xl hover:bg-emerald-500"
                   onClick={() => {
                     setSelectedProjectSlug('');
                     setProjectDraft(initialProject());
@@ -702,7 +725,7 @@ export default function AdminPage() {
                         setProjectDraft(initialProject());
                       }
                     }}
-                    className={`mt-1 w-full rounded-lg border px-3 py-2 ${cardClasses}`}
+                    className={`mt-1 w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                   >
                     <option value="projects">projects</option>
                     <option value="classProjects">classProjects</option>
@@ -714,7 +737,7 @@ export default function AdminPage() {
                   <select
                     value={selectedProjectSlug}
                     onChange={(event) => selectProject(event.target.value)}
-                    className={`mt-1 w-full rounded-lg border px-3 py-2 ${cardClasses}`}
+                    className={`mt-1 w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                   >
                     <option value="">Select project...</option>
                     {projectsForSection.map((project) => (
@@ -729,34 +752,34 @@ export default function AdminPage() {
                   value={projectDraft.title}
                   onChange={(event) => setProjectDraft((prev) => ({ ...prev, title: event.target.value }))}
                   placeholder="Project title"
-                  className={`rounded-lg border px-3 py-2 ${cardClasses}`}
+                  className={`w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                   required
                 />
                 <input
                   value={projectDraft.slug}
                   onChange={(event) => setProjectDraft((prev) => ({ ...prev, slug: event.target.value }))}
                   placeholder="project-slug"
-                  className={`rounded-lg border px-3 py-2 ${cardClasses}`}
+                  className={`w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                   required
                 />
                 <textarea
                   value={projectDraft.description}
                   onChange={(event) => setProjectDraft((prev) => ({ ...prev, description: event.target.value }))}
                   placeholder="Project description"
-                  className={`min-h-28 rounded-lg border px-3 py-2 ${cardClasses}`}
+                  className={`min-h-28 w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                   required
                 />
                 <input
                   value={projectDraft.tags.join(', ')}
                   onChange={(event) => setProjectDraft((prev) => ({ ...prev, tags: parseTags(event.target.value) }))}
                   placeholder="tags, separated, by, commas"
-                  className={`rounded-lg border px-3 py-2 ${cardClasses}`}
+                  className={`w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                 />
 
                 <div className="grid gap-2">
                   <p className="text-sm font-semibold">Links</p>
                   {projectDraft.links.map((link, index) => (
-                    <div key={`${index}-${link.label}`} className="grid gap-2 md:grid-cols-[1fr,2fr,auto]">
+                    <div key={`${index}-${link.label}`} className="grid gap-2 md:grid-cols-[minmax(0,1fr),minmax(0,2fr),auto]">
                       <input
                         value={link.label}
                         onChange={(event) => {
@@ -765,7 +788,7 @@ export default function AdminPage() {
                           setProjectDraft((prev) => ({ ...prev, links: next }));
                         }}
                         placeholder="Label"
-                        className={`rounded-lg border px-3 py-2 ${cardClasses}`}
+                        className={`w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                       />
                       <input
                         value={link.url}
@@ -775,7 +798,7 @@ export default function AdminPage() {
                           setProjectDraft((prev) => ({ ...prev, links: next }));
                         }}
                         placeholder="https://..."
-                        className={`rounded-lg border px-3 py-2 ${cardClasses}`}
+                        className={`w-full rounded-xl border px-3 py-2 ${cardClasses} focus:outline-none focus:ring-2 focus:ring-blue-500/60`}
                       />
                       <button
                         type="button"
@@ -783,7 +806,7 @@ export default function AdminPage() {
                           const next = projectDraft.links.filter((_, currentIndex) => currentIndex !== index);
                           setProjectDraft((prev) => ({ ...prev, links: next.length > 0 ? next : [{ label: '', url: '' }] }));
                         }}
-                        className="px-3 py-2 font-semibold text-white bg-red-600 rounded-lg hover:bg-red-500"
+                        className="px-3 py-2 font-semibold text-white bg-red-600 rounded-xl hover:bg-red-500"
                       >
                         Remove
                       </button>
@@ -792,7 +815,7 @@ export default function AdminPage() {
 
                   <button
                     type="button"
-                    className="px-3 py-2 font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-500 w-fit"
+                    className="px-3 py-2 font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-500 w-fit"
                     onClick={() => {
                       setProjectDraft((prev) => ({ ...prev, links: [...prev.links, { label: '', url: '' }] }));
                     }}
@@ -802,11 +825,11 @@ export default function AdminPage() {
                 </div>
 
                 <div className="flex gap-3">
-                  <button className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-500" type="submit">
+                  <button className="px-4 py-2 font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-500" type="submit">
                     Save Project
                   </button>
                   <button
-                    className="px-4 py-2 font-semibold text-white bg-red-600 rounded-lg hover:bg-red-500 disabled:opacity-50"
+                    className="px-4 py-2 font-semibold text-white bg-red-600 rounded-xl hover:bg-red-500 disabled:opacity-50"
                     type="button"
                     onClick={() => {
                       void removeProject();
@@ -822,14 +845,14 @@ export default function AdminPage() {
         )}
 
         {authorized && (
-          <section className={`rounded-2xl border p-5 mt-6 ${panelClasses}`}>
+          <section className={`rounded-3xl border p-6 mt-6 ${panelClasses}`}>
             <h2 className="text-xl font-semibold">Publish Sync</h2>
             <p className={`mt-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
               Saves already trigger sync automatically, but you can run it manually too.
             </p>
             <button
               type="button"
-              className="px-4 py-2 mt-4 font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-500"
+              className="px-4 py-2 mt-4 font-semibold text-white bg-emerald-600 rounded-xl hover:bg-emerald-500"
               onClick={() => {
                 void manualSync();
               }}
@@ -840,8 +863,8 @@ export default function AdminPage() {
         )}
 
         {isLoadingContent && <p className="mt-4">Loading content...</p>}
-        {!!contentError && <p className="mt-4 font-semibold text-red-400">{contentError}</p>}
-        {!!saveStatus && <p className="mt-4 font-semibold text-emerald-400">{saveStatus}</p>}
+        {!!contentError && <p className="mt-4 font-semibold text-red-400 break-words">{contentError}</p>}
+        {!!saveStatus && <p className="mt-4 font-semibold text-emerald-400 break-words">{saveStatus}</p>}
       </main>
 
       <Footer />
