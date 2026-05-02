@@ -150,15 +150,25 @@ def notify_auth(auth_url: str) -> None:
     threading.Thread(target=worker, daemon=True).start()
 
 
+USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+
+
 def exchange_token(payload: dict[str, str]) -> TokenSet:
     request = urllib.request.Request(
         f"{OAUTH_BASE}/oauth2/token",
         data=json.dumps(payload).encode(),
-        headers={"content-type": "application/json"},
+        headers={"content-type": "application/json", "user-agent": USER_AGENT},
         method="POST",
     )
-    with urllib.request.urlopen(request, timeout=15) as response:
-        data = json.loads(response.read().decode())
+    try:
+        with urllib.request.urlopen(request, timeout=15) as response:
+            data = json.loads(response.read().decode())
+    except urllib.error.HTTPError as error:
+        body = error.read().decode()
+        print(f"Token exchange failed: {error.code} {error.reason}", flush=True)
+        print(f"Payload: {json.dumps(payload, indent=2)}", flush=True)
+        print(f"Response: {body}", flush=True)
+        raise
 
     access_token = data.get("access_token", "")
     if not access_token:
@@ -380,6 +390,7 @@ def post_presence(api_url: str, tokens: TokenSet, payload: dict[str, Any]) -> tu
         headers={
             "authorization": f"Bearer {tokens.access_token}",
             "content-type": "application/json",
+            "user-agent": USER_AGENT,
         },
         method="POST",
     )
