@@ -26,6 +26,18 @@ function getRedis(): Redis | null {
   return new Redis({ url, token });
 }
 
+function parseStoredPresence(value: unknown): unknown {
+  if (typeof value !== 'string') {
+    return value;
+  }
+
+  try {
+    return JSON.parse(value);
+  } catch {
+    return value;
+  }
+}
+
 function asString(value: unknown): string | undefined {
   return typeof value === 'string' && value.trim() ? value.trim() : undefined;
 }
@@ -144,7 +156,7 @@ export async function onRequest(context: { request: Request; env: Record<string,
   if (request.method === 'GET') {
     const redis = getRedis();
     const stored = redis ? await redis.get(PRESENCE_KEY) : null;
-    return sendJson(200, normalizePresencePayload(stored));
+    return sendJson(200, normalizePresencePayload(parseStoredPresence(stored)));
   }
 
   if (request.method !== 'POST') {
@@ -174,7 +186,7 @@ export async function onRequest(context: { request: Request; env: Record<string,
     };
     const normalized = normalizePresencePayload(payload);
 
-    await redis.set(PRESENCE_KEY, normalized, { ex: 180 });
+    await redis.set(PRESENCE_KEY, JSON.stringify(normalized), { ex: 180 });
     return sendJson(200, { ok: true, presence: normalized });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Could not update presence.';
