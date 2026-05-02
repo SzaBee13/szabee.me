@@ -1,9 +1,9 @@
 import { Redis } from '@upstash/redis/cloudflare';
-import { normalizePresencePayload } from '../../src/lib/presence';
 
 const OWNER_UUID = '1d71a065-cb52-4f87-9d00-4e5240d8d017';
 const OWNER_EMAIL = 'miabajodlol@gmail.com';
 const PRESENCE_KEY = 'szabee:presence:latest';
+const PRESENCE_TTL_MS = 2 * 60 * 1000;
 
 function sendJson(status: number, payload: unknown): Response {
   return new Response(JSON.stringify(payload), {
@@ -24,6 +24,87 @@ function getRedis(): Redis | null {
   }
 
   return new Redis({ url, token });
+}
+
+function asString(value: unknown): string | undefined {
+  return typeof value === 'string' && value.trim() ? value.trim() : undefined;
+}
+
+function isFreshIso(value: string | undefined, nowMs: number, ttlMs: number): boolean {
+  if (!value) {
+    return false;
+  }
+
+  const time = Date.parse(value);
+  return Number.isFinite(time) && nowMs - time <= ttlMs;
+}
+
+function normalizePresenceItem(value: unknown, nowMs: number, ttlMs: number) {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return null;
+  }
+
+  const obj = value as Record<string, unknown>;
+  const source = asString(obj.source);
+  const title = asString(obj.title);
+  const updatedAt = asString(obj.updatedAt);
+
+  if (!source || !title || !updatedAt || !isFreshIso(updatedAt, nowMs, ttlMs) || obj.active === false) {
+    return null;
+  }
+
+  return {
+    source,
+    title,
+    subtitle: asString(obj.subtitle),
+    detail: asString(obj.detail),
+    startedAt: asString(obj.startedAt),
+    updatedAt,
+    icon: asString(obj.icon),
+    url: asString(obj.url),
+    active: true,
+  };
+}
+
+function normalizePresencePayload(value: unknown, nowMs: number = Date.now(), ttlMs: number = PRESENCE_TTL_MS) {
+  const empty = {
+    music: null,
+    games: [],
+    editors: [],
+    terminals: [],
+    updatedAt: null,
+    stale: true,
+  };
+
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return empty;
+  }
+
+  const obj = value as Record<string, unknown>;
+  const updatedAt = asString(obj.updatedAt);
+  const stale = !isFreshIso(updatedAt, nowMs, ttlMs);
+  if (stale) {
+    return { ...empty, updatedAt: updatedAt ?? null };
+  }
+
+  const sections = ['games', 'editors', 'terminals'] as const;
+  const normalized = {
+    music: normalizePresenceItem(obj.music, nowMs, ttlMs),
+    games: [],
+    editors: [],
+    terminals: [],
+    updatedAt: updatedAt ?? null,
+    stale: false,
+  };
+
+  for (const section of sections) {
+    const items = Array.isArray(obj[section]) ? obj[section] : [];
+    normalized[section] = items
+      .map((item) => normalizePresenceItem(item, nowMs, ttlMs))
+      .filter(Boolean);
+  }
+
+  return normalized;
 }
 
 async function extractBearer(request: Request): Promise<string | null> {
