@@ -1,6 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { normalizePresencePayload } from './src/lib/presence'
 
 type AdminContentResponse = {
   blogs: Array<{
@@ -48,6 +49,15 @@ type UpsertProjectPayload = {
     links?: Array<{ label: string; url: string }>
   }
 }
+
+type OAuthUser = {
+  uuid: string
+  email: string
+}
+
+const OAUTH_BASE = 'https://oauth.szabee.me'
+const OWNER_UUID = '1d71a065-cb52-4f87-9d00-4e5240d8d017'
+const OWNER_EMAIL = 'miabajodlol@gmail.com'
 
 function sendJson(res: ServerResponse, status: number, payload: unknown) {
   res.statusCode = status
@@ -159,6 +169,82 @@ function createAdminApiHandler(onMutate?: () => void) {
   }
 }
 
+function extractBearer(req: IncomingMessage): string | null {
+  const header = req.headers.authorization
+  if (!header) {
+    return null
+  }
+
+  const match = header.match(/^Bearer\s+(.+)$/i)
+  return match?.[1]?.trim() || null
+}
+
+async function validateOwner(token: string) {
+  const response = await fetch(`${OAUTH_BASE}/user`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error('Access token is invalid or expired.')
+  }
+
+  const user = (await response.json()) as OAuthUser
+  const isOwner =
+    user.uuid.toLowerCase() === OWNER_UUID.toLowerCase()
+    || user.email.toLowerCase() === OWNER_EMAIL.toLowerCase()
+
+  if (!isOwner) {
+    throw new Error('Authenticated account is not allowed to publish presence.')
+  }
+}
+
+function createPresenceApiHandler() {
+  let latestPresence: unknown = null
+
+  return async (req: IncomingMessage, res: ServerResponse) => {
+    const requestUrl = req.url ? new URL(req.url, 'http://localhost') : null
+    const pathname = requestUrl?.pathname ?? ''
+    if (pathname !== '/api/presence') {
+      return false
+    }
+
+    if (req.method === 'GET') {
+      sendJson(res, 200, normalizePresencePayload(latestPresence))
+      return true
+    }
+
+    if (req.method !== 'POST') {
+      res.setHeader('allow', 'GET, POST')
+      sendJson(res, 405, { error: 'Method not allowed.' })
+      return true
+    }
+
+    const token = extractBearer(req)
+    if (!token) {
+      sendJson(res, 401, { error: 'Missing bearer token.' })
+      return true
+    }
+
+    try {
+      await validateOwner(token)
+      const body = await parseBody(req)
+      latestPresence = {
+        ...(typeof body === 'object' && body !== null ? body : {}),
+        updatedAt: new Date().toISOString(),
+      }
+      sendJson(res, 200, { ok: true, presence: normalizePresencePayload(latestPresence) })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Could not update presence.'
+      const status = message.includes('not allowed') ? 403 : message.includes('token') ? 401 : 400
+      sendJson(res, status, { error: message })
+    }
+
+    return true
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -171,9 +257,16 @@ export default defineConfig({
         const handler = createAdminApiHandler(() => {
           server.ws.send({ type: 'full-reload' })
         })
+        const presenceHandler = createPresenceApiHandler()
 
         server.middlewares.use((req, res, next) => {
-          void handler(req, res).then((handled) => {
+          void presenceHandler(req, res).then((handled) => {
+            if (handled) {
+              return
+            }
+
+            return handler(req, res)
+          }).then((handled) => {
             if (!handled) {
               next()
             }
@@ -182,8 +275,15 @@ export default defineConfig({
       },
       configurePreviewServer(server) {
         const handler = createAdminApiHandler()
+        const presenceHandler = createPresenceApiHandler()
         server.middlewares.use((req, res, next) => {
-          void handler(req, res).then((handled) => {
+          void presenceHandler(req, res).then((handled) => {
+            if (handled) {
+              return
+            }
+
+            return handler(req, res)
+          }).then((handled) => {
             if (!handled) {
               next()
             }
