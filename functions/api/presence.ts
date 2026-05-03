@@ -15,9 +15,9 @@ function sendJson(status: number, payload: unknown): Response {
   });
 }
 
-function getRedis(): Redis | null {
-  const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
+function getRedis(env: Record<string, string>): Redis | null {
+  const url = env.UPSTASH_REDIS_REST_URL ?? env.KV_REST_API_URL;
+  const token = env.UPSTASH_REDIS_REST_TOKEN ?? env.KV_REST_API_TOKEN;
 
   if (!url || !token) {
     return null;
@@ -151,10 +151,10 @@ async function validateOwner(token: string): Promise<{ uuid: string; email: stri
 }
 
 export async function onRequest(context: { request: Request; env: Record<string, string> }): Promise<Response> {
-  const { request } = context;
+  const { request, env } = context;
 
   if (request.method === 'GET') {
-    const redis = getRedis();
+    const redis = getRedis(env);
     const stored = redis ? await redis.get(PRESENCE_KEY) : null;
     return sendJson(200, normalizePresencePayload(parseStoredPresence(stored)));
   }
@@ -163,7 +163,7 @@ export async function onRequest(context: { request: Request; env: Record<string,
     return sendJson(405, { error: 'Method not allowed.', allowed: 'GET, POST' });
   }
 
-  const redis = getRedis();
+  const redis = getRedis(env);
   if (!redis) {
     return sendJson(500, {
       error: 'Presence storage is not configured.',
