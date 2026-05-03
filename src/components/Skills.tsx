@@ -8,31 +8,31 @@ export const Skills = () => {
       name: "HTML / CSS / JS",
       icon: (
         <div className="flex space-x-2">
-          <img src="/icons/html-5-svgrepo-com.svg" alt="HTML" className="w-6 h-6" />
-          <img src="/icons/css-3-svgrepo-com.svg" alt="CSS" className="h-6 w-6" />
-          <img src="/icons/js-svgrepo-com.svg" alt="JavaScript" className="h-6 w-6" />
+          <img src="/icons/skills/html-5-svgrepo-com.svg" alt="HTML" className="w-6 h-6" />
+          <img src="/icons/skills/css-3-svgrepo-com.svg" alt="CSS" className="w-6 h-6" />
+          <img src="/icons/skills/js-svgrepo-com.svg" alt="JavaScript" className="w-6 h-6" />
         </div>
       ),
     },
     {
       name: "Python",
-      icon: <img src="/icons/python-svgrepo-com.svg" alt="Python" className="h-6 w-6" />,
+      icon: <img src="/icons/skills/python-svgrepo-com.svg" alt="Python" className="w-6 h-6" />,
     },
     {
       name: "Bash / PS",
-      icon: <img src="/icons/terminal-svgrepo-com.svg" alt="Terminal" className="h-6 w-6" />,
+      icon: <img src="/icons/skills/terminal-svgrepo-com.svg" alt="Terminal" className="w-6 h-6" />,
     },
     {
       name: "Lua",
-      icon: <img src="/icons/lua-svgrepo-com.svg" alt="Lua" className="h-6 w-6" />,
+      icon: <img src="/icons/skills/lua-svgrepo-com.svg" alt="Lua" className="w-6 h-6" />,
     },
     {
       name: "C++",
-      icon: <img src="/icons/cpp-svgrepo-com.svg" alt="C++" className="h-6 w-6" />,
+      icon: <img src="/icons/skills/cpp-svgrepo-com.svg" alt="C++" className="w-6 h-6" />,
     },
     {
       name: "Linux",
-      icon: <img src="/icons/linux-svgrepo-com.svg" alt="Linux" className="h-6 w-6" />,
+      icon: <img src="/icons/skills/linux-svgrepo-com.svg" alt="Linux" className="w-6 h-6" />,
     },
   ];
 
@@ -41,8 +41,8 @@ export const Skills = () => {
       id="skills"
       className={`py-12 ${isDarkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}
     >
-      <div className="max-w-4xl mx-auto px-4">
-        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+      <div className="max-w-4xl px-4 mx-auto">
+        <h2 className="mb-6 text-2xl font-bold text-center md:text-3xl">
           Skills
         </h2>
         <div className="flex flex-wrap justify-center gap-4">
