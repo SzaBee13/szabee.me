@@ -6,47 +6,57 @@ export const Socials = () => {
   const socials = [
     {
       name: 'YouTube',
-      iconName: 'youtube',
+      iconName: 'yt_icon_white_digital',
+      iconLink: '/icons/socials/yt_icon_white_digital.png',
+      iconType: 'image/png',
       link: 'https://www.youtube.com/@WizardGuruYT',
       color: 'bg-red-500 hover:bg-red-600',
     },
     {
       name: 'Twitch',
-      iconName: 'twitch',
+      iconName: 'twitch_glitch_flat_white',
+      iconLink: '/icons/socials/twitch_glitch_flat_white.svg',
+      iconType: 'image/svg+xml',
       link: 'https://www.twitch.tv/wizardguru',
       color: 'bg-purple-500 hover:bg-purple-600',
     },
     {
       name: 'Discord',
-      iconName: 'discord',
+      iconName: 'discord-symbol-white',
+      iconLink: '/icons/socials/Discord-Symbol-White.svg',
+      iconType: 'image/svg+xml',
       link: 'https://discord.gg/num6hCEhxr',
       color: 'bg-blue-500 hover:bg-blue-600',
     },
     {
       name: 'GitHub',
-      iconName: 'github',
+      iconName: 'github_invertocat_white',
+      iconLink: '/icons/socials/GitHub_Invertocat_White.svg',
+      iconType: 'image/svg+xml',
       link: 'https://github.com/SzaBee13',
       color: 'bg-gray-800 hover:bg-gray-700',
     },
     {
       name: 'Docker',
-      iconName: 'docker',
+      iconName: 'docker-mark-white',
+      iconLink: '/icons/socials/docker-mark-white.svg',
+      iconType: 'image/svg+xml',
       link: 'https://hub.docker.com/u/szabee13',
       color: 'bg-blue-500 hover:bg-blue-600',
     },
     {
       name: 'Reddit',
-      iconName: 'reddit',
+      iconName: 'reddit_icon_fullcolor',
+      iconLink: '/icons/socials/Reddit_Icon_FullColor.svg',
+      iconType: 'image/svg+xml',
       link: 'https://www.reddit.com/user/SzaBee13',
       color: 'bg-orange-500 hover:bg-orange-600',
     },
     {
       name: 'Email',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-        </svg>
-      ),
+      iconName: 'email_open_white',
+      iconLink: '/icons/socials/email_open_white.svg',
+      iconType: 'image/svg+xml',
       link: 'mailto:me@szabee.me',
       color: 'bg-gray-500 hover:bg-gray-600',
     },
@@ -69,9 +79,9 @@ export const Socials = () => {
               className={`flex items-center text-white px-4 py-2 rounded-full transition duration-300 ease-in-out shadow-lg ${social.color}`}
             >
               <img
-                src={`https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${social.iconName}.svg`}
+                src={social.iconLink}
                 alt={`${social.name} icon`}
-                className="w-6 h-6"
+                className={'w-6 h-6'}
               />
               <span className="ml-2">{social.name}</span>
             </a>

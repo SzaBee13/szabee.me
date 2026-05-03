@@ -17,6 +17,13 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+try:
+    from pypresence import Presence
+    HAS_DISCORD_RPC = True
+except ImportError:
+    HAS_DISCORD_RPC = False
+    Presence = None
+
 OAUTH_BASE = "https://oauth.szabee.me"
 DEFAULT_API_URL = "https://szabee.me/api/presence"
 DEFAULT_CALLBACK_PORT = 8765
@@ -319,6 +326,62 @@ def detect_music(timestamp: str) -> dict[str, str] | None:
     return None
 
 
+def detect_discord_rpc(timestamp: str) -> list[dict[str, str]]:
+    if not HAS_DISCORD_RPC or Presence is None:
+        return []
+
+    try:
+        rpc = Presence("1327713183372284027")
+        rpc.connect()
+
+        try:
+            activity = rpc.read_activity()
+        finally:
+            rpc.close()
+
+        if not activity:
+            return []
+
+        assets = activity.get("assets", {})
+        timestamps_data = activity.get("timestamps", {})
+
+        large_image = assets.get("large_image", "")
+        small_image = assets.get("small_image", "")
+
+        icon_url: str = ""
+        if large_image.startswith("http"):
+            icon_url = large_image
+        elif small_image.startswith("http"):
+            icon_url = small_image
+
+        start_ts: str = ""
+        if timestamps_data.get("start"):
+            start_ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(timestamps_data["start"] / 1000))
+
+        activity_type = activity.get("type", 0)
+        type_labels = ["Playing", "Streaming", "Listening", "Watching", "Competing"]
+        type_label = type_labels[activity_type] if activity_type < len(type_labels) else "Playing"
+
+        url: str = ""
+        buttons = activity.get("buttons", [])
+        if buttons and isinstance(buttons[0], dict):
+            url = buttons[0].get("url", "")
+
+        return [{
+            "source": "Discord",
+            "title": activity.get("name") or activity.get("details") or "Unknown",
+            "subtitle": type_label,
+            "detail": activity.get("state") or "",
+            "icon": icon_url,
+            "url": url,
+            "startedAt": start_ts,
+            "updatedAt": timestamp,
+        }]
+
+    except Exception:
+        return []
+
+
 def first_window_title(names: list[str]) -> str:
     title = run_command(["kdotool", "getactivewindow", "getwindowname"], timeout=1)
     lowered = title.lower()
@@ -362,23 +425,13 @@ def detect_games(processes: list[tuple[str, str]], timestamp: str) -> list[dict[
 
 def collect_presence() -> dict[str, Any]:
     timestamp = now_iso()
-    processes = list_processes()
-    editors = detect_process_items(processes, EDITORS, "KDE/Wayland", timestamp)
-    terminals = detect_process_items(processes, TERMINALS, "KDE/Wayland", timestamp)
-
-    editor_title = first_window_title(["code", "codium", "visual studio code"])
-    if editor_title and editors:
-        editors[0]["detail"] = editor_title
-
-    terminal_title = first_window_title(list(TERMINALS))
-    if terminal_title and terminals:
-        terminals[0]["detail"] = terminal_title
+    discord_activities = detect_discord_rpc(timestamp)
 
     return {
-        "music": detect_music(timestamp),
-        "games": detect_games(processes, timestamp),
-        "editors": editors[:2],
-        "terminals": terminals[:2],
+        "music": None,
+        "games": discord_activities,
+        "editors": [],
+        "terminals": [],
         "updatedAt": timestamp,
     }
 
