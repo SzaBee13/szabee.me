@@ -15,6 +15,10 @@ export const Skills = () => {
       ),
     },
     {
+      name: "React",
+      icon: <img src="/icons/skills/react-svgrepo-com.svg" alt="React" className="w-6 h-6" />,
+    },
+    {
       name: "Python",
       icon: <img src="/icons/skills/python-svgrepo-com.svg" alt="Python" className="w-6 h-6" />,
     },

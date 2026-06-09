@@ -12,13 +12,13 @@
 			]
 		},
 		{
-			"title": "Alma Language",
-			"slug": "alma-language",
-			"description": "I just had an idea to create a custom programming language that based on js.",
-			"tags": ["Javascript", "Programming Language", "Windows", "Linux", "MacOS"],
+			"title": "Arcade",
+			"slug": "arcade",
+			"description": "Arcade is a collection of mini-games that you can play with your friends. It is a fun game where you can play with your friends and have fun.",
+			"tags": ["Next.js", "Socket.io", "Multiplayer"],
 			"links": [
-				{ "label": "Visit Page", "url": "https://alma.szabee.me" },
-				{ "label": "GitHub", "url": "https://github.com/SzaBee13/alma-language" }
+				{ "label": "Visit Page", "url": "https://arcade.szabee.me" },
+				{ "label": "GitHub", "url": "https://github.com/SzaBee13/arcade" }
 			]
 		},
 		{
