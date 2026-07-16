@@ -32,23 +32,6 @@
 			]
 		},
 		{
-			"title": "Useful Py",
-			"slug": "useful-py",
-			"description": "I just wanted to create a python tool, and i created.",
-			"tags": ["Python", "Tools", "Input", "Lists"],
-			"links": [{ "label": "GitHub", "url": "https://github.com/SzaBee13/useful-py" }]
-		},
-		{
-			"title": "Valkon Client",
-			"slug": "valkon-client",
-			"description": "Me and my friend wanted to create a Fortnite client. So we made it. This is my first public project.",
-			"tags": ["Python", "Client", "Fortnite"],
-			"links": [
-				{ "label": "Visit Page", "url": "https://valkonclient.pages.dev" },
-				{ "label": "GitHub", "url": "https://github.com/SzaBee13/valkonclient" }
-			]
-		},
-		{
 			"title": "LSMP \"hack\"",
 			"slug": "lsmp-hack",
 			"description": "It just a frontend to backend of LSMP.",
@@ -56,16 +39,6 @@
 			"links": [
 				{ "label": "Visit Page", "url": "https://lsmp-hack.vercel.app" },
 				{ "label": "GitHub", "url": "https://github.com/SzaBee13/lsmp-hack" }
-			]
-		},
-		{
-			"title": "Escape Game Horror",
-			"slug": "escape-game-horror",
-			"description": "Our challenge is to create an escape game and here it is. It's also available on Szabfun.",
-			"tags": ["Python", "Escape", "Szabfun"],
-			"links": [
-				{ "label": "Visit Page", "url": "https://fun.szabee.me/escape-game" },
-				{ "label": "GitHub", "url": "https://github.com/SzaBee13/Escape-game-horror" }
 			]
 		},
 		{
@@ -84,7 +57,7 @@
 			"description": "A Minecraft plugin that allows players to create double doors with a single block.",
 			"tags": ["Java", "Minecraft", "Spigot"],
 			"links": [
-				{ "label": "GitHub", "url": "https://github.com/SzaBee13/double-doors-spigot" },
+				{ "label": "GitHub", "url": "https://github.com/SzaBee13/double-doors-server" },
 				{ "label": "Modrinth", "url": "https://modrinth.com/plugin/double-doors-server" },
 				{ "label": "FastStats", "url": "https://faststats.dev/project/double-doors-server/minecraft-plugin" }
 			]
@@ -97,7 +70,6 @@
 			"description": "That days homework is to copy this (Coded by my teacher, more details at about)",
 			"tags": ["Javascript", "Guesser", "Multi Language"],
 			"links": [
-				{ "label": "Visit Page", "url": "https://day-gueesr.vercel.app" },
 				{ "label": "GitHub", "url": "https://github.com/SzaBee13/Day-Guesser" }
 			]
 		}
