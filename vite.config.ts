@@ -2,6 +2,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { normalizePresencePayload } from './src/lib/presence'
+import tailwindcss from '@tailwindcss/vite'
 
 type AdminContentResponse = {
   blogs: Array<{
@@ -248,7 +249,7 @@ function createPresenceApiHandler() {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
+    react(), tailwindcss(),
     {
       name: 'admin-api',
       enforce: 'pre',

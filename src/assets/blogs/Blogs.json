@@ -5,5 +5,12 @@
     "description": "This is why i hate Microsoft",
     "date": "2026-03-17",
     "tags": ["microsoft", "hate", "rant", "ai"]
+  },
+  {
+    "slug": "siri-ai-in-the-eu",
+    "title": "Siri AI in the EU",
+    "description": "Because of the EU's DMA regulations, Apple has been forced to not ship Siri AI on iOS 27 to EU iPhone and iPad users.",
+    "date": "2026-06-09",
+    "tags": ["siri", "ai", "eu", "dma", "apple", "wwdc26", "ios27"]
   }
 ]

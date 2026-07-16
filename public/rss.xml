@@ -14,16 +14,26 @@
       <link>https://szabee.me/blogs/microslop</link>
       <guid isPermaLink="true">https://szabee.me/blogs/microslop</guid>
       <pubDate>Tue, 17 Mar 2026 00:00:00 GMT</pubDate>
-      <description>This is why i hate Microsoft
-
-Tags: microsoft, hate, rant, ai</description>
-      <content:encoded><![CDATA[This is why i hate Microsoft
-
-Tags: microsoft, hate, rant, ai]]></content:encoded>
+      <description>This is why i hate Microsoft</description>
       <category>microsoft</category>
       <category>hate</category>
       <category>rant</category>
       <category>ai</category>
+    </item>
+    <item>
+      <title>Siri AI in the EU</title>
+      <link>https://szabee.me/blogs/siri-ai-in-the-eu</link>
+      <guid isPermaLink="true">https://szabee.me/blogs/siri-ai-in-the-eu</guid>
+      <pubDate>Tue, 09 Jun 2026 15:30:00 GMT</pubDate>
+      <description>Because of the EU's DMA regulations, Apple has been forced to not ship Siri AI on iOS 27 to EU iPhone and iPad users.
+      </description>
+      <category>siri</category>
+      <category>ai</category>
+      <category>eu</category>
+      <category>dma</category>
+      <category>apple</category>
+      <category>wwdc26</category>
+      <category>ios27</category>
     </item>
   </channel>
 </rss>

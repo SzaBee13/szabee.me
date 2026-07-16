@@ -2,6 +2,7 @@ import { useTheme } from './hooks/useTheme';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { About } from './components/About';
+import { Lang } from './components/Lang';
 import { Skills } from './components/Skills';
 import { Socials } from './components/Socials';
 import { NowPlaying } from './components/NowPlaying';
@@ -22,6 +23,7 @@ function App() {
       <div>
         <HeroSection />
         <About />
+        <Lang />
         <Skills />
         <Socials />
         <NowPlaying />

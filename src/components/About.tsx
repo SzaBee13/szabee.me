@@ -11,7 +11,10 @@ export const About = () => {
       <div className="max-w-4xl mx-auto px-4">
         <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center">About Me</h2>
         <p className="text-sm md:text-base mb-3">
-          Hello! I'm SzaBee13, a passionate developer and gamer. I love creating projects that challenge me and allow me to learn new things.
+          Hello! I'm Szabolcs (he/him), a passionate developer and gamer. I love creating projects that challenge me and allow me to learn new things.
+        </p>
+        <p className="text-sm md:text-base mb-3">
+          Location: Budapest, Hungary
         </p>
         <p className="text-sm md:text-base mb-3">
           Feel free to explore my work and connect with me on social media!

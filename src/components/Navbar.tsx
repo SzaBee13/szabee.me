@@ -38,6 +38,7 @@ export const Navbar = () => {
       <ul className="hidden lg:flex lg:space-x-6">
         <li><a href="/#home" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Home</a></li>
         <li><a href="/#about" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">About</a></li>
+        <li><a href="/#lang" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Languages</a></li>
         <li><a href="/#skills" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Skills</a></li>
         <li><a href="/projects" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Projects</a></li>
         <li><a href="/projects/class" className="px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Class Projects</a></li>
@@ -73,6 +74,7 @@ export const Navbar = () => {
         <ul className="absolute left-0 flex flex-col w-full p-4 space-y-2 bg-gray-800 lg:hidden top-16">
           <li><a href="/#home" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Home</a></li>
           <li><a href="/#about" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">About</a></li>
+          <li><a href="/#lang" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Languages</a></li>
           <li><a href="/#skills" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Skills</a></li>
           <li><a href="/projects" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Projects</a></li>
           <li><a href="/projects/class" className="block px-3 py-2 rounded hover:bg-gray-700 hover:text-white">Class Projects</a></li>
