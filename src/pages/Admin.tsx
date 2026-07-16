@@ -48,6 +48,7 @@ const LS_REFRESH_TOKEN = 'szabee.admin.refresh_token';
 
 const PKCE_STATE_KEY = 'szabee.admin.oauth_state';
 const PKCE_VERIFIER_KEY = 'szabee.admin.oauth_verifier';
+const ADMIN_API_HTML_HINT = 'Admin API returned the app page instead of JSON. Restart the Vite dev server so /api/admin routes are registered.';
 
 function parseTags(value: string): string[] {
   return value
@@ -93,9 +94,7 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
   const snippet = text.trim().slice(0, 200);
 
   if (snippet.startsWith('<!DOCTYPE html>') || snippet.startsWith('<html')) {
-    throw new Error(
-      'Admin API returned the app page instead of JSON. Restart the Vite dev server so /api/admin routes are registered.',
-    );
+    throw new Error(ADMIN_API_HTML_HINT);
   }
 
   throw new Error(`Expected JSON but got ${contentType || 'unknown content-type'}: ${snippet}`);
@@ -871,6 +870,11 @@ export default function AdminPage() {
 
         {isLoadingContent && <p className="mt-4">Loading content...</p>}
         {!!contentError && <p className="mt-4 font-semibold text-red-400 break-words">{contentError}</p>}
+        {!!contentError.includes(ADMIN_API_HTML_HINT) && (
+          <p className={`mt-2 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            Restart the Vite dev server after changing admin routes so /api/admin is registered.
+          </p>
+        )}
         {!!saveStatus && <p className="mt-4 font-semibold text-emerald-400 break-words">{saveStatus}</p>}
       </main>
 

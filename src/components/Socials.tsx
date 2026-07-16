@@ -25,7 +25,7 @@ export const Socials = () => {
       iconName: 'discord-symbol-white',
       iconLink: '/icons/socials/Discord-Symbol-White.svg',
       iconType: 'image/svg+xml',
-      link: 'https://discord.gg/num6hCEhxr',
+      link: 'https://discord.gg/HMQaR44y5d',
       color: 'bg-blue-500 hover:bg-blue-600',
     },
     {
